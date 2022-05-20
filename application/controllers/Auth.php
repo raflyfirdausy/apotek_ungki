@@ -7,9 +7,6 @@ class Auth extends Auth_Controller
     {
         parent::__construct();
         $this->load->model("Admin_model", "admin");
-        if ($this->session->has_userdata(SESSION)) {
-            redirect(base_url("dashboard"));
-        }
     }
 
     public function index()
@@ -19,6 +16,9 @@ class Auth extends Auth_Controller
 
     public function login()
     {
+        if ($this->session->has_userdata(SESSION)) {
+            redirect(base_url("dashboard"));
+        }
         $this->loadView('auth/login');
     }
 
