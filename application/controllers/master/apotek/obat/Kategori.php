@@ -1,21 +1,20 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Golongan extends RFLController
+class Kategori extends RFLController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Golongan_obat_model", "golongan");
+        $this->load->model("Kategori_obat_model", "kategori");
     }
 
     public function index()
     {
         $data = [
-            "title"     => "Golongan Obat",
-            "module"    => "obat"
+            "title"     => "Kategori Obat",
         ];
-        $this->loadViewBack("master/apotek/obat/data_golongan", $data);
+        $this->loadViewBack("master/apotek/obat/data_kategori", $data);
     }
 
     public function get_data()
@@ -23,9 +22,9 @@ class Golongan extends RFLController
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTable($this->golongan)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTable($this->golongan)->order_by("id", "DESC")->count_rows() ?: 0;
-        $dataCountAll       = $this->golongan->count_rows() ?: 0;
+        $data               = $this->filterDataTable($this->kategori)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTable($this->kategori)->order_by("id", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->kategori->count_rows() ?: 0;
 
         echo json_encode([
             "draw"              => $this->input->post("draw", TRUE),
@@ -68,35 +67,35 @@ class Golongan extends RFLController
             "keterangan"    => $keterangan
         ];
 
-        $insert = $this->golongan->insert($data);
+        $insert = $this->kategori->insert($data);
         if (!$insert) {
             echo json_encode([
                 "code"      => 503,
-                "message"   => "Terjadi kesalahan saat menambahkan data Golongan Obat. Silahkan hubungi programmer"
+                "message"   => "Terjadi kesalahan saat menambahkan data Kategori Obat. Silahkan hubungi programmer"
             ]);
             die;
         }
 
         echo json_encode([
             "code"      => 200,
-            "message"   => "Golongan Obat berhasil di tambahkan dengan nama $nama !"
+            "message"   => "Kategori Obat berhasil di tambahkan dengan nama $nama !"
         ]);
     }
 
     public function get($id = NULL)
     {
-        $data = $this->golongan->where(["id" => $id])->get();
+        $data = $this->kategori->where(["id" => $id])->get();
         if (!$data) {
             echo json_encode([
                 "code"      => 404,
-                "message"   => "Data Golongan Obat tidak ditemukan, silahkan cobalah beberapa saat lagi"
+                "message"   => "Data Kategori Obat tidak ditemukan, silahkan cobalah beberapa saat lagi"
             ]);
             die;
         }
 
         echo json_encode([
             "code"      => 200,
-            "message"   => "Data Golongan Obat ditemukan",
+            "message"   => "Data Kategori Obat ditemukan",
             "data"      => $data
         ]);
     }
@@ -112,27 +111,27 @@ class Golongan extends RFLController
             "keterangan"    => $keterangan
         ];
 
-        $cekData    = $this->golongan->where(["id" => $id_data])->get();
+        $cekData    = $this->kategori->where(["id" => $id_data])->get();
         if (!$cekData) {
             echo json_encode([
                 "code"      => 404,
-                "message"   => "Data Golongan Obat tidak ditemukan"
+                "message"   => "Data Kategori Obat tidak ditemukan"
             ]);
             die;
         }
 
-        $update = $this->golongan->where(["id" => $cekData["id"]])->update($dataUpdate);
+        $update = $this->kategori->where(["id" => $cekData["id"]])->update($dataUpdate);
         if (!$update) {
             echo json_encode([
                 "code"      => 503,
-                "message"   => "Terjadi kesalahan saat mengedit Golongan Obat. Silahkan hubungi programmer"
+                "message"   => "Terjadi kesalahan saat mengedit Kategori Obat. Silahkan hubungi programmer"
             ]);
             die;
         }
 
         echo json_encode([
             "code"      => 200,
-            "message"   => "Golongan Obat berhasil di ubah !"
+            "message"   => "Kategori Obat berhasil di ubah !"
         ]);
     }
 
@@ -140,18 +139,19 @@ class Golongan extends RFLController
     {
         $id_data    = $this->input->post("id_data");
 
-        $delete = $this->golongan->where(["id" => $id_data])->delete();
+        $delete = $this->kategori->where(["id" => $id_data])->delete();
         if (!$delete) {
             echo json_encode([
                 "code"      => 503,
-                "message"   => "Terjadi kesalahan saat menghapus golongan obat. Silahkan hubungi programmer"
+                "message"   => "Terjadi kesalahan saat menghapus Kategori obat. Silahkan hubungi programmer"
             ]);
             die;
         }
 
         echo json_encode([
             "code"      => 200,
-            "message"   => "Data golongan obat berhasil di hapus !"
+            "message"   => "Data Kategori obat berhasil di hapus !"
         ]);
     }
+
 }

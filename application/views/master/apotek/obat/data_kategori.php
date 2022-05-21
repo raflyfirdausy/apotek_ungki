@@ -45,7 +45,7 @@
                                 <tr>
                                     <th class="text-center" style="width: 3%">No.</th>
                                     <th style="width: 8%">Aksi</th>
-                                    <th>Nama Golongan</th>
+                                    <th>Nama Kategori</th>
                                     <th>Keterangan</th>
                                     <th>Waktu Ditambahkan</th>
                                 </tr>
@@ -67,12 +67,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" id="form_add" action="<?= base_url("master/apotek/obat/add") ?>" enctype='multipart/form-data'>
+            <form method="POST" id="form_add" action="<?= base_url("master/apotek/obat/kategori/add") ?>" enctype='multipart/form-data'>
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="recipient-name" class="control-label">Nama Golongan Obat <span class="text-danger">*</span></label>
+                                <label for="recipient-name" class="control-label">Nama Kategori Obat <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="nama" id="nama" required>
                             </div>
                             <div class="col-md-12">
@@ -100,42 +100,16 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="<?= base_url("master/apotek/suplier/edit") ?>" id="form_edit" enctype='multipart/form-data'>
+            <form method="POST" action="<?= base_url("master/apotek/obat/kategori/edit") ?>" id="form_edit" enctype='multipart/form-data'>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Nama Suplier <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama" id="nama_edit" autocomplete="off" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Alamat <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="alamat" id="alamat_edit" autocomplete="off" required>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="control-label">Nama Kategori Obat <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="nama" id="nama_edit" required>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Kota <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="kota" id="kota_edit" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">No Telp <span class="text-danger">*</span></label>
-                                <input type="text" onkeyup="validate(this)" class="form-control" name="no_telp" id="no_telp_edit">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Nomor Rekening <span class="text-danger">*</span></label>
-                                <input type="text" onkeyup="validate(this)" class="form-control" name="no_rek" id="no_rek_edit">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Nama Bank <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama_bank" id="nama_bank_edit">
-                            </div>
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="control-label">Keterangan </label>
+                            <textarea class="form-control" name="keterangan" id="keterangan_edit" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -192,7 +166,7 @@
             },
         ],
         "ajax": {
-            "url": "<?= base_url("master/apotek/obat/golongan/get_data") ?>",
+            "url": "<?= base_url("master/apotek/obat/kategori/get_data") ?>",
             "type": "POST"
         },
         "columns": [{
@@ -258,7 +232,7 @@
         $.ajax({
             type: "POST",
             dataType: "JSON",
-            url: "<?= base_url("master/apotek/obat/golongan/add") ?>",
+            url: "<?= base_url("master/apotek/obat/kategori/add") ?>",
             data: data,
             processData: false,
             contentType: false,
@@ -311,7 +285,7 @@
         $.ajax({
             type: "POST",
             dataType: "JSON",
-            url: "<?= base_url("master/apotek/suplier/edit") ?>",
+            url: "<?= base_url("master/apotek/obat/kategori/edit") ?>",
             data: data,
             processData: false,
             contentType: false,
@@ -356,19 +330,15 @@
     const modal_edit = (id) => {
         $("#modal_edit").modal("show")
         $.ajax({
-            url: "<?= base_url('master/apotek/suplier/get/') ?>" + id,
+            url: "<?= base_url('master/apotek/obat/kategori/get/') ?>" + id,
             type: "GET",
             dataType: "JSON",
             contentType: "application/json; charset=utf-8",
             success: function(result) {
                 if (result.code == 200) {
                     let data = result.data
-                    $("#nama_edit").val(data.nama)
-                    $("#alamat_edit").val(data.alamat)
-                    $("#kota_edit").val(data.kota)
-                    $("#no_telp_edit").val(data.no_telp)
-                    $("#nama_bank_edit").val(data.nama_bank)
-                    $("#no_rek_edit").val(data.no_rek)
+                    $("#nama_edit").val(data.nama)                   
+                    $("#keterangan_edit").val(data.keterangan)                   
                     $("#id_data").val(data.id)
                 } else {
                     Swal.fire({
@@ -402,7 +372,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url('master/apotek/suplier/delete') ?>",
+                    url: "<?= base_url('master/apotek/obat/kategori/delete') ?>",
                     data: {
                         "id_data": id
                     },
