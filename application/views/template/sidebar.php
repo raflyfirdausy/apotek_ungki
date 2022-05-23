@@ -93,7 +93,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="<?= base_url("master/apotek/obat/data") ?>" class="nav-link">
-                                <p>Data Obat</p>
+                                <p>Master Data obat</p>
                             </a>
                         </li>
                     </ul>

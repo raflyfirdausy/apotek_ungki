@@ -57,20 +57,20 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Nomor Telp <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
-                                        <input type="telp" name="no_hp" class="form-control" value="<?= $admin->no_hp ?>">
+                                        <input type="telp" onkeyup="validate(this)" name="no_hp" class="form-control" value="<?= $admin->no_hp ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
                                         <select class="form-control select2bs4" name="jenis_kelamin">
-                                            <option value="LAKI-LAKI">LAKI-LAKI</option>
-                                            <option value="PEREMPUAN">PEREMPUAN</option>
+                                            <option value="LAKI-LAKI" <?= $admin->jenis_kelamin == "PEREMPUAN" ? "" : "selected" ?>>LAKI-LAKI</option>
+                                            <option value="PEREMPUAN" <?= $admin->jenis_kelamin == "PEREMPUAN" ? "selected" : "" ?>>PEREMPUAN</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary add_btn">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary add_btn">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -105,3 +105,108 @@
         </div>
     </section>
 </div>
+
+
+<script>
+    $("#form_profile").submit(e => {
+        e.preventDefault()
+        var form = $('#form_profile')[0]
+        var data = new FormData(form)
+
+        $(".add_btn").prop('disabled', true)
+        $(".add_btn").text("Sedang menyimpan data...")
+
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: "<?= base_url("master/apotek/profile/change_profile") ?>",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result) {
+                console.log(result)
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: result.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    }).then((result) => {
+                        location.reload()
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: result.message,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    })
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                Swal.fire("Oops", xhr.responseText, "error")
+            }
+        })
+    })
+
+    $("#form_pass").submit(e => {
+        e.preventDefault()
+        var form = $('#form_pass')[0]
+        var data = new FormData(form)
+
+        $(".add_btn").prop('disabled', true)
+        $(".add_btn").text("Sedang menyimpan data...")
+
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: "<?= base_url("master/apotek/profile/change_password") ?>",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result) {
+                console.log(result)
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: result.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    }).then((result) => {
+                        location.reload()
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: result.message,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    })
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                Swal.fire("Oops", xhr.responseText, "error")
+            }
+        })
+    })
+</script>
