@@ -34,6 +34,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="<?= base_url("master/apotek/suplier") ?>" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>Data Suplier</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chart-pie"></i>
                         <p>
@@ -59,13 +66,7 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="nav-item">
-                    <a href="<?= base_url("master/apotek/suplier") ?>" class="nav-link">
-                        <i class="nav-icon fas fa-users-cog"></i>
-                        <p>Data Suplier</p>
-                    </a>
-                </li>
+               
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
