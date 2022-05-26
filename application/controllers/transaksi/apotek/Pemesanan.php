@@ -80,6 +80,49 @@ class Pemesanan extends RFLController
         $this->loadViewBack("transaksi/apotek/pemesanan/data_pemesanan", $data);
     }
 
+    public function get($noFaktur = NULL)
+    {
+        $data = $this->vPemesananDetail
+            ->where(["no_faktur" => $noFaktur])
+            ->as_array()
+            ->get_all();
+
+        if ($data) {
+            echo json_encode([
+                "code"      => 200,
+                "message"   => "Data ditemukan",
+                "data"      => $data
+            ]);
+        } else {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Data tidak ditemukan"
+            ]);
+        }
+    }
+
+    public function delete()
+    {
+        $no_faktur = $this->input->post('no_faktur');
+        $cek = $this->trPemesanan->where(["no_faktur" => $no_faktur])->get();
+        if (!$cek) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Data tidak ditemukan"
+            ]);
+            die;
+        }
+
+        $this->trPemesanan->where(["id" => $cek["id"]])->delete();
+        $this->trPemesananDetail->where(["id_pemesanan" => $cek["id"]])->delete();
+
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Pesanan berhasil di hapus"
+        ]);
+        die;
+    }
+
     public function tambah()
     {
         $suplier    = $this->suplier->get_all();
@@ -90,6 +133,21 @@ class Pemesanan extends RFLController
             "obat"      => $obat
         ];
         $this->loadViewBack("transaksi/apotek/pemesanan/tambah_pemesanan", $data);
+    }
+
+    public function ubah($no_faktur = NULL)
+    {
+        $pemesanan_obat     = $this->vPemesanan->where(["no_faktur" => $no_faktur])->get() ?: [];
+        $suplier            = $this->suplier->get_all();
+        $obat               = $this->vObat->get_all();
+
+        $data   = [
+            "title"             => "Ubah data pemesanan obat",
+            "pemesanan_obat"    => $pemesanan_obat,
+            "suplier"           => $suplier,
+            "obat"              => $obat
+        ];
+        $this->loadViewBack("transaksi/apotek/pemesanan/edit_pemesanan", $data);
     }
 
     public function tambah_proses()
@@ -155,31 +213,10 @@ class Pemesanan extends RFLController
         ]);
     }
 
-    public function get($noFaktur = NULL)
+    public function ubah_proses()
     {
-        $data = $this->vPemesananDetail
-            ->where(["no_faktur" => $noFaktur])
-            ->as_array()
-            ->get_all();
-
-        if ($data) {
-            echo json_encode([
-                "code"      => 200,
-                "message"   => "Data ditemukan",
-                "data"      => $data
-            ]);
-        } else {
-            echo json_encode([
-                "code"      => 404,
-                "message"   => "Data tidak ditemukan"
-            ]);
-        }
-    }
-
-    public function delete()
-    {
-        $no_faktur = $this->input->post('no_faktur');
-        $cek = $this->trPemesanan->where(["no_faktur" => $no_faktur])->get();
+        $noFaktur = $this->input->post("no_faktur");
+        $cek = $this->trPemesanan->where(["no_faktur" => $noFaktur])->get();
         if (!$cek) {
             echo json_encode([
                 "code"      => 404,
@@ -188,13 +225,58 @@ class Pemesanan extends RFLController
             die;
         }
 
-        $this->trPemesanan->where(["id" => $cek["id"]])->delete();
+        $dataPemesanan = [
+            "id_admin"              => $this->userData->id,
+            "id_suplier"            => $this->input->post("suplier"),
+            "status_suplier"        => "MENUNGGU",
+            "status_apotek"         => "MENUNGGU",
+            "keterangan_pemesanan"  => $this->input->post("catatan")
+        ];
+
+        //TODO : UPDATE INTO PEMESANAN        
+        $updatePemesanan = $this->trPemesanan->where(["no_faktur" => $noFaktur])->update($dataPemesanan);
+        if (!$updatePemesanan) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Terjadi kesalahan saat melakukan pemesanan obat. silahkan hubungi programmer"
+            ]);
+            die;
+        }
+
+        //TODO : DELETE DETAIL
         $this->trPemesananDetail->where(["id_pemesanan" => $cek["id"]])->delete();
+
+        //TODO : INSERT DETAIL
+        $id_obat            = $this->input->post("id_obat");
+        $quantity_obat      = $this->input->post("quantity_obat");
+        $catatan_detail     = $this->input->post("catatan_detail");
+
+        $index                  = 0;
+        $dataPemesananDetail    = [];
+        foreach ($id_obat as $io) {
+
+            array_push($dataPemesananDetail, [
+                "id_pemesanan"  => $cek["id"],
+                "id_obat"       => $id_obat[$index],
+                "qty"           => $quantity_obat[$index],
+                "catatan"       => $catatan_detail[$index]
+            ]);
+
+            $index++;
+        }
+
+        $insertDetail = $this->trPemesananDetail->insert($dataPemesananDetail);
+        if (!$insertDetail) {
+            echo json_encode([
+                "code"      => 403,
+                "message"   => "Terjadi kesalahan saat mengubah pemesanan obat. Silahkan hubungi programmer"
+            ]);
+            die;
+        }
 
         echo json_encode([
             "code"      => 200,
-            "message"   => "Pesanan berhasil di hapus"
+            "message"   => "Pemesanan Obat berhasil diubah"
         ]);
-        die;
     }
 }
