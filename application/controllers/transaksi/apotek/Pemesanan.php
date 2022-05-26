@@ -175,4 +175,26 @@ class Pemesanan extends RFLController
             ]);
         }
     }
+
+    public function delete()
+    {
+        $no_faktur = $this->input->post('no_faktur');
+        $cek = $this->trPemesanan->where(["no_faktur" => $no_faktur])->get();
+        if (!$cek) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Data tidak ditemukan"
+            ]);
+            die;
+        }
+
+        $this->trPemesanan->where(["id" => $cek["id"]])->delete();
+        $this->trPemesananDetail->where(["id_pemesanan" => $cek["id"]])->delete();
+
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Pesanan berhasil di hapus"
+        ]);
+        die;
+    }
 }

@@ -80,7 +80,7 @@
                                 <th width="5%">No.</th>
                                 <th>Nama Obat</th>
                                 <th>Quantity</th>
-                                <th>Catatan</th>                                
+                                <th>Catatan</th>
                             </thead>
                             <tbody id="table_body_detail"></tbody>
                             <tfoot id="table_foot_detail"></tfoot>
@@ -177,7 +177,7 @@
                     }
                     tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"></i></span></a>&nbsp;`
                     tombol += `<a href="<?= base_url("transaksi/apotek/pemesanan/ubah/") ?>${row.no_faktur}" type="button" title="Edit"  class="btn ${disabled} btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></a>&nbsp;`
-                    tombol += `<button ${disabled} type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    tombol += `<button ${disabled} type="button" title="Hapus" onclick="hapus('${row.no_faktur}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
                     return tombol;
                 }
             },
@@ -366,7 +366,7 @@
         });
     }
 
-    const hapus = (id) => {
+    const hapus = (no_faktur) => {
         swal.fire({
             title: 'Hapus Data ?',
             text: "Data akan terhapus secara permanent",
@@ -379,9 +379,9 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url('master/apotek/pengguna/delete') ?>",
+                    url: "<?= base_url('transaksi/apotek/pemesanan/delete') ?>",
                     data: {
-                        "id_data": id
+                        "no_faktur": no_faktur
                     },
                     dataType: "json",
                     success: function(data) {
