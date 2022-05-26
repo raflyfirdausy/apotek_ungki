@@ -83,13 +83,7 @@
                                             <?php endforeach ?>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label text-right">Stok Sekarang <span class="text-danger">*</span></label>
-                                    <div class="col-sm-9">
-                                        <input required type="number" name="stok" class="form-control" placeholder="Stok Sekarang" value="<?= $obat["stok"] ?>">
-                                    </div>
-                                </div>
+                                </div>                               
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label text-right">Minimal Stok <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">

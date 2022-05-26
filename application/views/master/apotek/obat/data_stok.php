@@ -34,7 +34,6 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <a href="<?= back() ?>" type="button" class="btn btn-primary float-left"><i class="fas fa-chevron-left"></i> Kembali</a>
-                    <a href="<?= base_url("master/apotek/obat/data/tambah") ?>" type="button" class="btn btn-success float-right"><i class="fas fa-plus"></i> Tambah Data <?= $title ?></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -47,9 +46,9 @@
                                     <th>Nama</th>
                                     <th>Golongan</th>
                                     <th>Kategori</th>
-                                    <th>Satuan</th>                                    
+                                    <th>Satuan</th>
                                     <th>Minimal Stok</th>
-                                    <th>Waktu Ditambahkan</th>
+                                    <th>Total Stok</th>
                                 </tr>
                             </thead>
                         </table>
@@ -135,9 +134,13 @@
                 "targets": [7],
                 "orderable": false
             },
+            {
+                "targets": [8],
+                "orderable": false
+            },
         ],
         "ajax": {
-            "url": "<?= base_url("master/apotek/obat/data/get_data") ?>",
+            "url": "<?= base_url("master/apotek/obat/stok/get_data") ?>",
             "type": "POST"
         },
         "columns": [{
@@ -154,8 +157,7 @@
                 className: "text-center align-middle",
                 render: function(data, type, row, meta) {
                     let tombol = ''
-                    tombol += `<a href="<?= base_url("master/apotek/obat/data/ubah/") ?>${row.kode_obat}" type="button" title="Edit" onclick="modal_edit('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></a>&nbsp;`
-                    tombol += `<button type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    tombol += `<a href="<?= base_url("master/apotek/obat/stok/detail/") ?>${row.kode_obat}" type="button" title="Edit" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i> Detail</span></a>&nbsp;`
                     return tombol;
                 }
             },
@@ -178,7 +180,10 @@
                 "data": "min_stok",
             },
             {
-                "data": "created_at",
+                "data": "min_stok",
+                render: function(data, type, row, meta) {
+                    return "OTW";
+                }
             },
         ]
     })

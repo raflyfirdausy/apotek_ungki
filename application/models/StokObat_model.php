@@ -1,8 +1,8 @@
 <?php
 
-class VPerusahaan_model extends Custom_model
+class StokObat_model extends Custom_model
 {
-    public $table                   = 'v_perusahaan';
+    public $table                   = 'm_obat_stok';
     public $primary_key             = 'id';
     public $soft_deletes            = TRUE;
     public $timestamps              = TRUE;
@@ -10,6 +10,6 @@ class VPerusahaan_model extends Custom_model
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct();      
     }
 }

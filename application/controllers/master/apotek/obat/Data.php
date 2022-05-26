@@ -83,9 +83,8 @@ class Data extends RFLController
         $golongan       = isset($inputKolom) ? $inputKolom[4]["search"]["value"] : "";
         $kategori       = isset($inputKolom) ? $inputKolom[5]["search"]["value"] : "";
         $satuan         = isset($inputKolom) ? $inputKolom[6]["search"]["value"] : "";
-        $stok           = isset($inputKolom) ? $inputKolom[7]["search"]["value"] : "";
-        $min_stok       = isset($inputKolom) ? $inputKolom[8]["search"]["value"] : "";
-        $created_at     = isset($inputKolom) ? $inputKolom[9]["search"]["value"] : "";
+        $min_stok       = isset($inputKolom) ? $inputKolom[7]["search"]["value"] : "";
+        $created_at     = isset($inputKolom) ? $inputKolom[8]["search"]["value"] : "";
 
         if (!empty($kode)) {
             $model = $model->where("LOWER(kode_obat)", "LIKE", strtolower($kode));
@@ -107,10 +106,6 @@ class Data extends RFLController
             $model = $model->where("LOWER(nama_satuan)", "LIKE", strtolower($satuan));
         }
 
-        if (!empty($stok)) {
-            $model = $model->where("LOWER(stok)", "LIKE", strtolower($stok));
-        }
-
         if (!empty($min_stok)) {
             $model = $model->where("LOWER(min_stok)", "LIKE", strtolower($min_stok));
         }
@@ -129,7 +124,6 @@ class Data extends RFLController
         $id_golongan    = $this->input->post("id_golongan");
         $id_kategori    = $this->input->post("id_kategori");
         $id_satuan      = $this->input->post("id_satuan");
-        $stok           = $this->input->post("stok");
         $min_stok       = $this->input->post("min_stok");
         $deskripsi      = $this->input->post("deskripsi");
         $indikasi       = $this->input->post("indikasi");
@@ -153,7 +147,6 @@ class Data extends RFLController
             "id_satuan"   => $id_satuan,
             "kode_obat"   => $kode,
             "nama"        => $nama,
-            "stok"        => $stok,
             "min_stok"    => $min_stok,
             "deskripsi"   => $deskripsi,
             "indikasi"    => $indikasi,
@@ -203,8 +196,7 @@ class Data extends RFLController
         $nama           = $this->input->post("nama");
         $id_golongan    = $this->input->post("id_golongan");
         $id_kategori    = $this->input->post("id_kategori");
-        $id_satuan      = $this->input->post("id_satuan");
-        $stok           = $this->input->post("stok");
+        $id_satuan      = $this->input->post("id_satuan");        
         $min_stok       = $this->input->post("min_stok");
         $deskripsi      = $this->input->post("deskripsi");
         $indikasi       = $this->input->post("indikasi");
@@ -217,8 +209,7 @@ class Data extends RFLController
             "id_golongan" => $id_golongan,
             "id_kategori" => $id_kategori,
             "id_satuan"   => $id_satuan,
-            "nama"        => $nama,
-            "stok"        => $stok,
+            "nama"        => $nama,            
             "min_stok"    => $min_stok,
             "deskripsi"   => $deskripsi,
             "indikasi"    => $indikasi,
