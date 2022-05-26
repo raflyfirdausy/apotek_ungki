@@ -7,6 +7,8 @@ class Pengguna extends RFLController
     {
         parent::__construct();
         $this->load->model("Admin_model", "pengguna");
+        $this->load->model("VAdmin_model", "vPengguna");
+        $this->load->model("Suplier_model", "suplier");
     }
 
     public function index()
@@ -37,8 +39,9 @@ class Pengguna extends RFLController
     public function suplier()
     {
         $data = [
-            "title" => "Suplier",
-            "level" => "SUPLIER"
+            "title"     => "Suplier",
+            "level"     => "SUPLIER",
+            "suplier"   => $this->suplier->get_all()
         ];
 
         $this->loadViewBack("master/apotek/pengguna/data_suplier", $data);
@@ -49,9 +52,9 @@ class Pengguna extends RFLController
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTable($this->pengguna)->where("level", "=", $level)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTable($this->pengguna)->where("level", "=", $level)->order_by("id", "DESC")->count_rows() ?: 0;
-        $dataCountAll       = $this->pengguna->where("level", "=", $level)->count_rows() ?: 0;
+        $data               = $this->filterDataTable($this->vPengguna)->where("level", "=", $level)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTable($this->vPengguna)->where("level", "=", $level)->order_by("id", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->vPengguna->where("level", "=", $level)->count_rows() ?: 0;
 
         for ($i = 0; $i < sizeof($data); $i++) {
             unset($data[$i]["password"]);
@@ -73,6 +76,7 @@ class Pengguna extends RFLController
         $no_hp          = isset($inputKolom) ? $inputKolom[4]["search"]["value"] : "";
         $jenis_kelamin  = isset($inputKolom) ? $inputKolom[5]["search"]["value"] : "";
         $created_at     = isset($inputKolom) ? $inputKolom[6]["search"]["value"] : "";
+        $nama_suplier   = isset($inputKolom) && isset($inputKolom[7]) ? $inputKolom[7]["search"]["value"] : "";
 
         if (!empty($username)) {
             $model = $model->where("LOWER(username)", "LIKE", strtolower($username));
@@ -92,6 +96,10 @@ class Pengguna extends RFLController
 
         if (!empty($created_at)) {
             $model = $model->where("LOWER(created_at)", "LIKE", strtolower($created_at));
+        }
+
+        if (!empty($nama_suplier)) {
+            $model = $model->where("LOWER(nama_suplier)", "LIKE", strtolower($nama_suplier));
         }
 
 
@@ -124,6 +132,7 @@ class Pengguna extends RFLController
         $no_hp          = $this->input->post("no_telp");
         $jenis_kelamin  = $this->input->post("jenis_kelamin");
         $level          = $this->input->post("level");
+        $id_suplier     = $this->input->post("id_suplier");
 
         $cekAdmin   = $this->pengguna->where(["username" => $username])->get();
         if ($cekAdmin) {
@@ -140,7 +149,8 @@ class Pengguna extends RFLController
             "nama"          => $nama,
             "level"         => $level,
             "no_hp"         => $no_hp,
-            "jenis_kelamin"    => $jenis_kelamin
+            "jenis_kelamin"    => $jenis_kelamin,
+            "id_suplier"    => $id_suplier
         ]);
         if (!$insert) {
             echo json_encode([
@@ -163,6 +173,7 @@ class Pengguna extends RFLController
         $nama           = $this->input->post("nama");
         $no_hp          = $this->input->post("no_telp");
         $jenis_kelamin  = $this->input->post("jenis_kelamin");
+        $id_suplier     = $this->input->post("id_suplier");
 
         $cekData    = $this->pengguna->where(["id" => $id_data])->get();
         if (!$cekData) {
@@ -176,7 +187,8 @@ class Pengguna extends RFLController
         $dataUpdate = [
             "nama"              => $nama,
             "no_hp"             => $no_hp,
-            "jenis_kelamin"     => $jenis_kelamin
+            "jenis_kelamin"     => $jenis_kelamin,
+            "id_suplier"    => $id_suplier
         ];
 
         if (!empty($password)) {

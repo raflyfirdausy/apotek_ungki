@@ -50,6 +50,7 @@
                                     <th>No. Telp</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Waktu Dibuat</th>
+                                    <th>Suplier</th>
                                 </tr>
                             </thead>
                         </table>
@@ -97,11 +98,20 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label for="recipient-name" class="control-label">Jenis Kelamin</label>
                                 <select class="form-control select2bs4" name="jenis_kelamin" id="jenis_kelamin">
                                     <option value="LAKI-LAKI">Laki-Laki</option>
                                     <option value="PEREMPUAN">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="control-label">Suplier <span class="text-danger">*</span></label>
+                                <select required class="form-control select2bs4" name="id_suplier" id="id_suplier">
+                                    <option value="">-- PILIH SUPLIER --</option>
+                                    <?php foreach($suplier as $s) : ?>
+                                        <option value="<?= $s["id"] ?>"><?= $s["nama"] ?></option>
+                                    <?php endforeach ?>
                                 </select>
                             </div>
                         </div>
@@ -155,11 +165,20 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label for="recipient-name" class="control-label">Jenis Kelamin</label>
                                 <select class="form-control select2bs4" name="jenis_kelamin" id="jenis_kelamin_edit">
                                     <option value="LAKI-LAKI">Laki-Laki</option>
                                     <option value="PEREMPUAN">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="control-label">Suplier <span class="text-danger">*</span></label>
+                                <select required class="form-control select2bs4" name="id_suplier" id="id_suplier_edit">
+                                    <option value="">-- PILIH SUPLIER --</option>
+                                    <?php foreach($suplier as $s) : ?>
+                                        <option value="<?= $s["id"] ?>"><?= $s["nama"] ?></option>
+                                    <?php endforeach ?>
                                 </select>
                             </div>
                         </div>
@@ -224,6 +243,10 @@
                 "targets": [6],
                 "orderable": false
             },
+            {
+                "targets": [7],
+                "orderable": false
+            },
         ],
         "ajax": {
             "url": "<?= base_url("master/apotek/pengguna/get_data/$level") ?>",
@@ -262,6 +285,9 @@
             },
             {
                 "data": "created_at",
+            },
+            {
+                "data": "nama_suplier",
             },
         ]
     })
@@ -407,6 +433,7 @@
                     $("#nama_edit").val(data.nama)
                     $("#no_telp_edit").val(data.no_hp)
                     $("#jenis_kelamin_edit").val(data.jenis_kelamin).trigger("change")
+                    $("#id_suplier_edit").val(data.id_suplier).trigger("change")
                     $("#id_data").val(data.id)
                 } else {
                     Swal.fire({

@@ -66,7 +66,7 @@
                         </li>
                     </ul>
                 </li>
-               
+
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -134,11 +134,30 @@
                         <p>Stock Opname</p>
                     </a>
                 </li>
-                <li class="nav-header">Transaksi Suplier</li>
+
+                <li class="nav-header">PO Obat Suplier</li>
                 <li class="nav-item">
-                    <a href="<?= base_url("transaksi/suplier/pre-order") ?>" class="nav-link">
+                    <a href="<?= base_url("transaksi/suplier/pre-order/belum") ?>" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
-                        <p>Pemesanan Obat (Suplier)</p>
+                        <p>Belum di Verif</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url("transaksi/suplier/pre-order/sudah") ?>" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>Sudah di Verif</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url("transaksi/suplier/pre-order/tolak") ?>" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>Di Tolak</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url("transaksi/suplier/pre-order/batal") ?>" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>Di Batalkan</p>
                     </a>
                 </li>
 

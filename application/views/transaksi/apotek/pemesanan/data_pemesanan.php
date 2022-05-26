@@ -10,6 +10,7 @@
     </div>
 
     <section class="content">
+
         <?php if ($this->session->flashdata("gagal")) : ?>
             <div class="alert bg-danger alert-dismissible fade show" role="alert">
                 <strong>Gagal !</strong> <?= $this->session->flashdata("gagal") ?>
@@ -35,7 +36,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <a href="<?= back() ?>" type="button" class="btn btn-primary float-left"><i class="fas fa-chevron-left"></i> Kembali</a>
-                    <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#modal_tambah"><i class="fas fa-plus"></i> Tambah Data Admin</button>
+                    <a href="<?= base_url("transaksi/apotek/pemesanan/tambah") ?>" type="button" class="btn btn-success float-right"><i class="fas fa-plus"></i> Tambah Data <?= $title ?></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -44,10 +45,12 @@
                                 <tr>
                                     <th class="text-center" style="width: 3%">No.</th>
                                     <th style="width: 8%">Aksi</th>
-                                    <th>Email</th>
-                                    <th>Nama</th>
-                                    <th>No. Telp</th>
-                                    <th>Keterangan</th>
+                                    <th>No Faktur</th>
+                                    <th>Tanggal</th>
+                                    <th>Suplier</th>
+                                    <th>Total Obat</th>
+                                    <th>Status Suplier</th>
+                                    <th>Dibuat oleh</th>
                                     <th>Waktu Dibuat</th>
                                 </tr>
                             </thead>
@@ -59,110 +62,35 @@
     </section>
 </div>
 
-<div class="modal fade myModal" id="modal_tambah">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Form Tambah Admin</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form method="POST" action="<?= base_url("master/admin/add") ?>" id="form_add" enctype='multipart/form-data'>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" name="email" id="email" autocomplete="off" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" name="password" id="password" autocomplete="off" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Nama <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama" id="nama" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">No Telp </label>
-                                <input type="text" onkeyup="validate(this)" class="form-control" name="no_telp" id="no_telp">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="recipient-name" class="control-label">Keterangan</label>
-                                <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary add_btn">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade myModal" id="modal_edit">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade myModal" id="modal_lihat">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Form Edit Admin</h4>
+                <h4 class="modal-title">Detail pemesanan obat <b>(<span id="no_faktur"></span>)</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="<?= base_url("master/admin/edit") ?>" id="form_edit" enctype='multipart/form-data'>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" disabled readonly class="form-control" name="email" id="email_edit" autocomplete="off">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Password </label>
-                                <input type="password" class="form-control" name="password" id="password_edit" autocomplete="off">
-                                <small class="text-info">Kosongi jika tidak ingin merubah password</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">Nama <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama" id="nama_edit" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="recipient-name" class="control-label">No Telp </label>
-                                <input type="text" onkeyup="validate(this)" class="form-control" name="no_telp" id="no_telp_edit">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="recipient-name" class="control-label">Keterangan</label>
-                                <textarea class="form-control" name="keterangan" id="keterangan_edit"></textarea>
-                            </div>
-                        </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table style="width: 100%" class="table table-sm table-bordered table-hover" id="table_detail">
+                            <thead>
+                                <th width="5%">No.</th>
+                                <th>Nama Obat</th>
+                                <th>Quantity</th>
+                                <th>Catatan</th>                                
+                            </thead>
+                            <tbody id="table_body_detail"></tbody>
+                            <tfoot id="table_foot_detail"></tfoot>
+                        </table>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <input type="hidden" name="id_data" id="id_data">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary add_btn">Simpan</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+            </div>
         </div>
     </div>
 </div>
@@ -216,9 +144,17 @@
                 "targets": [6],
                 "orderable": false
             },
+            {
+                "targets": [7],
+                "orderable": false
+            },
+            {
+                "targets": [8],
+                "orderable": false
+            },
         ],
         "ajax": {
-            "url": "<?= base_url("master/admin/get_data") ?>",
+            "url": "<?= base_url("transaksi/apotek/pemesanan/get_data") ?>",
             "type": "POST"
         },
         "columns": [{
@@ -235,26 +171,38 @@
                 className: "text-center align-middle",
                 render: function(data, type, row, meta) {
                     let tombol = ''
-                    tombol += `<button type="button" title="Edit" onclick="modal_edit('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></button>&nbsp;`
-                    tombol += `<button type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    let disabled = ''
+                    if (row.status_suplier != 'MENUNGGU') {
+                        disabled = 'disabled'
+                    }
+                    tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"></i></span></a>&nbsp;`
+                    tombol += `<a href="<?= base_url("transaksi/apotek/pemesanan/ubah/") ?>${row.no_faktur}" type="button" title="Edit"  class="btn ${disabled} btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></a>&nbsp;`
+                    tombol += `<button ${disabled} type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
                     return tombol;
                 }
             },
             {
-                "data": "email",
+                "data": "no_faktur",
             },
             {
-                "data": "nama",
+                "data": "tgl_faktur",
             },
             {
-                "data": "no_hp",
+                "data": "nama_suplier",
             },
             {
-                "data": "keterangan",
+                "data": "total_obat",
+            },
+            {
+                "data": "status_suplier",
+            },
+            {
+                "data": "nama_admin",
             },
             {
                 "data": "created_at",
             },
+
         ]
     })
 
@@ -290,7 +238,7 @@
         $.ajax({
             type: "POST",
             dataType: "JSON",
-            url: "<?= base_url("master/admin/add") ?>",
+            url: "<?= base_url("master/apotek/pengguna/add") ?>",
             data: data,
             processData: false,
             contentType: false,
@@ -309,7 +257,6 @@
                         confirmButtonText: 'Oke Siap !'
                     }).then((result) => {
                         $('#form_add').trigger("reset");
-                        $("#modal_tambah").modal("hide")
                         table.ajax.reload(null, false)
                     })
                 } else {
@@ -343,7 +290,7 @@
         $.ajax({
             type: "POST",
             dataType: "JSON",
-            url: "<?= base_url("master/admin/edit") ?>",
+            url: "<?= base_url("master/apotek/pengguna/edit") ?>",
             data: data,
             processData: false,
             contentType: false,
@@ -385,36 +332,36 @@
         })
     })
 
-    const modal_edit = (id) => {
-        $("#modal_edit").modal("show")
+    const modal_lihat = (no_faktur) => {
+        $("#modal_lihat").modal("show")
+        $("#no_faktur").text(no_faktur)
         $.ajax({
-            url: "<?= base_url('master/admin/get/') ?>" + id,
+            url: "<?= base_url('transaksi/apotek/pemesanan/get/') ?>" + no_faktur,
             type: "GET",
             dataType: "JSON",
             contentType: "application/json; charset=utf-8",
-            success: function(result) {
-                if (result.code == 200) {
-                    let data = result.data
-                    $("#email_edit").val(data.email)
-                    $("#nama_edit").val(data.nama)
-                    $("#no_telp_edit").val(data.no_hp)
-                    $("#keterangan_edit").val(data.keterangan)
-                    $("#id_data").val(data.id)
-                } else {
-                    Swal.fire({
-                        title: 'Gagal',
-                        text: result.message,
-                        icon: 'error',
-                        showCancelButton: false,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke Siap !'
-                    })
+            success: function(response) {
+                $('#table_body_detail').html('');
+                $('#table_foot_detail').html('');
+                $('#footer_modal').html('');
+                if (response.code == 200) {
+                    let result = response.data
+                    var z = 1;
+                    for (var i in result) {
+                        var r = result[i];
+                        $('#table_body_detail').append(
+                            /*html*/
+                            `<tr>
+                            <td class="text-center">${z++}</td>
+                            <td><span>${r.nama_obat}</span></td>
+                            <td><span>${r.qty}</span></td>
+                            <td><span>${r.catatan}</span></td>                        
+                        </tr>`
+                        );
+                    }
+
                 }
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                $(".add_btn").prop('disabled', false)
-                $(".add_btn").text("Simpan")
-                Swal.fire("Oops", xhr.responseText, "error")
+                $("#table_detail").DataTable();
             }
         });
     }
@@ -432,7 +379,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url('master/admin/delete') ?>",
+                    url: "<?= base_url('master/apotek/pengguna/delete') ?>",
                     data: {
                         "id_data": id
                     },
