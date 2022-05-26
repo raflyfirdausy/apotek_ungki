@@ -75,7 +75,7 @@ class Stok extends RFLController
         if (!empty($min_stok)) {
             $model = $model->where("LOWER(min_stok)", "LIKE", strtolower($min_stok));
         }
-        
+
         if (!empty($stok)) {
             $model = $model->where("LOWER(stok)", "LIKE", strtolower($stok));
         }
@@ -102,13 +102,13 @@ class Stok extends RFLController
         $this->loadViewBack("master/apotek/obat/stok_obat_detail", $data);
     }
 
-    public function get_data_detail()
+    public function get_data_detail($id_obat = NULL)
     {
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTableDetail($this->vStok)->order_by("tgl_expired", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTableDetail($this->vStok)->order_by("tgl_expired", "DESC")->count_rows() ?: 0;
+        $data               = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->order_by("tgl_expired", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->order_by("tgl_expired", "DESC")->count_rows() ?: 0;
         $dataCountAll       = $this->vStok->count_rows() ?: 0;
 
         echo json_encode([

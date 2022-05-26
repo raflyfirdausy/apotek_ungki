@@ -131,7 +131,7 @@
             },
         ],
         "ajax": {
-            "url": "<?= base_url("master/apotek/obat/stok/get_data_detail") ?>",
+            "url": "<?= base_url("master/apotek/obat/stok/get_data_detail/" . $obat["id"] ) ?>",
             "type": "POST"
         },
         "columns": [{
