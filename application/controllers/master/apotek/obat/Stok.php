@@ -50,6 +50,7 @@ class Stok extends RFLController
         $kategori       = isset($inputKolom) ? $inputKolom[5]["search"]["value"] : "";
         $satuan         = isset($inputKolom) ? $inputKolom[6]["search"]["value"] : "";
         $min_stok       = isset($inputKolom) ? $inputKolom[7]["search"]["value"] : "";
+        $stok           = isset($inputKolom) ? $inputKolom[8]["search"]["value"] : "";
 
         if (!empty($kode)) {
             $model = $model->where("LOWER(kode_obat)", "LIKE", strtolower($kode));
@@ -73,6 +74,10 @@ class Stok extends RFLController
 
         if (!empty($min_stok)) {
             $model = $model->where("LOWER(min_stok)", "LIKE", strtolower($min_stok));
+        }
+        
+        if (!empty($stok)) {
+            $model = $model->where("LOWER(stok)", "LIKE", strtolower($stok));
         }
 
         return $model;

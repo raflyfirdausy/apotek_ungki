@@ -180,9 +180,9 @@
                 "data": "min_stok",
             },
             {
-                "data": "min_stok",
+                "data": "stok",
                 render: function(data, type, row, meta) {
-                    return "OTW";
+                    return data;
                 }
             },
         ]
