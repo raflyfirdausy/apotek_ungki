@@ -19,6 +19,7 @@ class Pre_order extends SuplierController
         $this->load->model("VPemesanan_model", "vPemesanan");
         $this->load->model("Suplier_model", "suplier");
         $this->load->model("StokObat_model", "stokObat");
+        $this->load->model("VDetail_pemesanan_model", "vPemesananDetail");
     }
 
     public function index()
@@ -31,6 +32,24 @@ class Pre_order extends SuplierController
         $data = [
             "title"     => "Pemesanan Obat Belum di proses",
             "status"    => "MENUNGGU"
+        ];
+        $this->loadViewBack("transaksi/suplier/pre_order/data_preorder", $data);
+    }
+
+    public function sudah()
+    {
+        $data = [
+            "title"     => "Pemesanan Obat Belum di proses",
+            "status"    => "DI_TERIMA"
+        ];
+        $this->loadViewBack("transaksi/suplier/pre_order/data_preorder", $data);
+    }
+
+    public function tolak()
+    {
+        $data = [
+            "title"     => "Pemesanan Obat Belum di proses",
+            "status"    => "DI_TOLAK"
         ];
         $this->loadViewBack("transaksi/suplier/pre_order/data_preorder", $data);
     }
@@ -225,5 +244,26 @@ class Pre_order extends SuplierController
             "message"   => "Berhasil melakukan penolakan pemesanan obat"
         ]);
         die;
+    }
+
+    public function get($noFaktur = NULL)
+    {
+        $data = $this->vPemesananDetail
+            ->where(["no_faktur" => $noFaktur])
+            ->as_array()
+            ->get_all();
+
+        if ($data) {
+            echo json_encode([
+                "code"      => 200,
+                "message"   => "Data ditemukan",
+                "data"      => $data
+            ]);
+        } else {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Data tidak ditemukan"
+            ]);
+        }
     }
 }

@@ -55,6 +55,40 @@
     </section>
 </div>
 
+<div class="modal fade myModal" id="modal_lihat">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detail pemesanan obat <b>(<span id="no_faktur"></span>)</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table style="width: 100%" class="table table-sm table-bordered table-hover" id="table_detail">
+                            <thead>
+                                <th width="5%">No.</th>
+                                <th>Nama Obat</th>
+                                <th>Quantity Permintaan</th>
+                                <th>Catatan</th>
+                                <th>Quantity Diterima</th>
+                                <th>Tanggal Expired</th>
+                            </thead>
+                            <tbody id="table_body_detail"></tbody>
+                            <tfoot id="table_foot_detail"></tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
         $('#table_data thead tr').clone(true).appendTo('#table_data thead');
@@ -148,7 +182,10 @@
                     if (row.status_suplier != 'MENUNGGU') {
                         disabled = 'disabled'
                     }
-                    tombol += `<a href="<?= base_url("transaksi/suplier/pre-order/proses/") ?>${row.no_faktur}" type="button" title="Edit"  class="btn ${disabled} btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i> Proses</span></a>&nbsp;`
+                    tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"> Detail</i></span></a>&nbsp;`
+                    <?php if ($status == "MENUNGGU") : ?>
+                        tombol += `<a href="<?= base_url("transaksi/suplier/pre-order/proses/") ?>${row.no_faktur}" type="button" title="Edit"  class="btn ${disabled} btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i> Proses</span></a>&nbsp;`
+                    <?php endif ?>
                     return tombol;
                 }
             },
@@ -170,4 +207,40 @@
 
         ]
     })
+
+    const modal_lihat = (no_faktur) => {
+        $("#modal_lihat").modal("show")
+        $("#no_faktur").text(no_faktur)
+        $.ajax({
+            url: "<?= base_url('transaksi/suplier/pre-order/get/') ?>" + no_faktur,
+            type: "GET",
+            dataType: "JSON",
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                $('#table_body_detail').html('');
+                $('#table_foot_detail').html('');
+                $('#footer_modal').html('');
+                if (response.code == 200) {
+                    let result = response.data
+                    var z = 1;
+                    for (var i in result) {
+                        var r = result[i];
+                        $('#table_body_detail').append(
+                            /*html*/
+                            `<tr>
+                            <td class="text-center">${z++}</td>
+                            <td><span>${r.nama_obat}</span></td>
+                            <td><span>${r.qty}</span></td>
+                            <td><span>${r.catatan}</span></td>                        
+                            <td><span>${r.qty_acc}</span></td>                        
+                            <td><span>${r.tgl_expired}</span></td>                        
+                        </tr>`
+                        );
+                    }
+
+                }
+                $("#table_detail").DataTable();
+            }
+        });
+    }
 </script>
