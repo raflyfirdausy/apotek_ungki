@@ -65,7 +65,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-10">
-                                <h5 class="m-0 text-dark text-bold" id="titleGrafik">Detail pembelian sampah</h5>
+                                <h5 class="m-0 text-dark text-bold" id="titleGrafik">Detail pemesanan obat</h5>
                             </div>
                             <div class="col-md-1">
                                 <button id="btnTambah" type="button" class="btn btn-md btn-primary float-right">TAMBAH</a>
@@ -76,6 +76,20 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="recipient-name" class="control-label">Nama Obat</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="recipient-name" class="control-label">Quantity</label>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="recipient-name" class="control-label">Keterangan</label>
+                            </div>
+                            <div class="col-md-1">
+                                
+                            </div>
+                        </div>
                         <div id="sectionInput">
                         </div>
                     </div>

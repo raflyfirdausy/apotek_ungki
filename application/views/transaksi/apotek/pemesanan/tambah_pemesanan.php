@@ -75,6 +75,18 @@
                         <div id="sectionAwal">
                             <div class="row">
                                 <div class="col-md-4">
+                                    <label for="recipient-name" class="control-label">Nama Obat</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="recipient-name" class="control-label">Quantity</label>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="recipient-name" class="control-label">Keterangan</label>
+                                </div>
+                                <div class="col-md-1">
+
+                                </div>
+                                <div class="col-md-4">
                                     <select class="form-control select2bs4 id_obat" id="id_obat_1" name="id_obat[]" style="width: 100%;" required>
                                         <option value="">-- PILIH OBAT --</option>
                                         <?php foreach ($obat as $o) : ?>

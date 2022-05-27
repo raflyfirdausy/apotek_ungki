@@ -12,6 +12,8 @@ class Stock_opname extends RFLController
         $this->load->model("Obat_model", "obat");
         $this->load->model("VObat_model", "vObat");
         $this->load->model("Transaksi_obat_model", "trObat");
+        $this->load->model("VStok_obat_model", "vStok");
+        $this->load->model("StokObat_model", "stok");
     }
 
     public function index()
@@ -104,7 +106,7 @@ class Stock_opname extends RFLController
         ]);
     }
 
-    public function proses()
+    public function prosesX()
     {
         $id_data        = $this->input->post("id_data");
         $stock_nyata    = $this->input->post("stock_nyata");
@@ -139,5 +141,54 @@ class Stock_opname extends RFLController
             "code"      => 200,
             "message"   => "Stock Opname pada obat " . $data["nama"] . " berhasil dilakukan"
         ]);
+    }
+
+    public function proses($kode_obat = NULL)
+    {
+        $cek = $this->vObat->where(["kode_obat" => $kode_obat])->get();
+        if (!$cek) {
+            $this->session->set_flashdata("gagal", "Data obat tidak diketahui");
+            redirect("transaksi/apotek/stock-opname");
+        }
+
+        $stok = $this->vStok->where(["id_obat" => $cek["id"]])->order_by("tgl_expired", "ASC")->get_all() ?: [];
+
+        $data = [
+            "title"     => "Proses Stock Opname obat",
+            "obat"      => $cek,
+            "stok"      => $stok
+        ];
+        $this->loadViewBack("transaksi/apotek/stock_opname/proses_stok_opname", $data);
+    }
+
+    public function execute()
+    {        
+        $id_obat            = $this->input->post("id_obat");
+        $id_stok            = $this->input->post("id_stok");
+        $stok_sebenarnya    = $this->input->post("stok_sebenarnya");
+        $stok_gudang        = $this->input->post("stok_gudang");
+
+        $index = 0;
+        foreach ($id_stok as $id) {
+            $this->stok->where(["id" => $id])->update([
+                "stok" => $stok_sebenarnya[$index],
+            ]);
+
+            //TODO : INSERT INTO TR_TRANSAKSI_OBAT
+            $this->trObat->insert([
+                "id_admin"      => $this->userData->id,
+                "id_obat"       => $id_obat,
+                "tanggal"       => date("Y-m-d"),
+                "stok_awal"     => $stok_gudang[$index],
+                "stok_akhir"    => $stok_sebenarnya[$index],
+                "jenis"         => "STOCK OPNAME",
+                "keterangan"    => "Perubahan stok dari $stok_gudang[$index] menjadi $stok_sebenarnya[$index]"
+            ]);
+
+            $index++;
+        }
+
+        $this->session->set_flashdata("sukses", "Stock Opname berhasil dilakukan");
+        redirect("transaksi/apotek/stock-opname");
     }
 }

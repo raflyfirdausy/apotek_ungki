@@ -105,13 +105,13 @@
                     </ul>
                 </li>
 
-                <li class="nav-header">Master Data Suplier</li>
+                <!-- <li class="nav-header">Master Data Suplier</li>
                 <li class="nav-item">
                     <a href="<?= base_url("master/suplier/data-suplier") ?>" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>Data Suplier</p>
                     </a>
-                </li>
+                </li> -->
 
                 <li class="nav-header">Transaksi Apotek</li>
 

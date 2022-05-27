@@ -213,7 +213,7 @@
                 className: "text-center align-middle",
                 render: function(data, type, row, meta) {
                     let tombol = ''
-                    tombol += `<button type="button" title="Proses" onclick="modal_proses('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span> Proses</button>&nbsp;`
+                    tombol += `<a href="<?= base_url("transaksi/apotek/stock-opname/proses/") ?>${row.kode_obat}" type="button" title="Proses"  class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span> Proses</a>&nbsp;`
                     return tombol;
                 }
             },
