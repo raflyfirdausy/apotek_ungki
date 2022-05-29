@@ -340,7 +340,7 @@
                         icon: 'success',
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke Siap !'
+                        confirmButtonText: 'Oke!'
                     }).then((result) => {
                         $('#form_add').trigger("reset");
                         $("#modal_tambah").modal("hide")
@@ -353,7 +353,7 @@
                         icon: 'error',
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke Siap !'
+                        confirmButtonText: 'Oke!'
                     })
                 }
 
@@ -393,7 +393,7 @@
                         icon: 'success',
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke Siap !'
+                        confirmButtonText: 'Oke!'
                     }).then((result) => {
                         $('#form_edit').trigger("reset");
                         $("#modal_edit").modal("hide")
@@ -406,7 +406,7 @@
                         icon: 'error',
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke Siap !'
+                        confirmButtonText: 'Oke!'
                     })
                 }
 
@@ -442,7 +442,7 @@
                         icon: 'error',
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke Siap !'
+                        confirmButtonText: 'Oke!'
                     })
                 }
             },

@@ -68,12 +68,12 @@
             </li>
             <li class="nav-item">
                 <a href="<?= base_url("master/apotek/obat/data") ?>" class="nav-link">
-                    <p>Master Data obat</p>
+                    <p>Obat Masuk</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="<?= base_url("master/apotek/obat/stok") ?>" class="nav-link">
-                    <p>Master Data Stok obat</p>
+                    <p>Data Stok obat</p>
                 </a>
             </li>
         </ul>

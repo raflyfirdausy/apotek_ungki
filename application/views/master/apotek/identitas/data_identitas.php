@@ -183,7 +183,7 @@
                             icon: 'success',
                             title: 'Sukses',
                             text: `${result["message"]}`,
-                            confirmButtonText: 'Okesiap !',
+                            confirmButtonText: 'Ok!',
                         })
                         .then((result) => {
                             window.location.href = "<?= base_url('master/apotek/identitas') ?>";
