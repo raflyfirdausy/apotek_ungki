@@ -47,11 +47,9 @@
                                     <th style="width: 8%">Aksi</th>
                                     <th>No Faktur</th>
                                     <th>Tanggal</th>
-                                    <th>Suplier</th>
                                     <th>Total Obat</th>
-                                    <th>Status Suplier</th>
-                                    <th>Dibuat oleh</th>
-                                    <th>Waktu Dibuat</th>
+                                    <th>Catatan</th>
+                                    <th>Waktu Ditambahkan</th>
                                 </tr>
                             </thead>
                         </table>
@@ -67,7 +65,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Detail pemesanan obat <b>(<span id="no_faktur"></span>)</b></h4>
+                <h4 class="modal-title">Detail data obat keluar <b>(<span id="no_faktur"></span>)</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -79,6 +77,7 @@
                             <thead>
                                 <th width="5%">No.</th>
                                 <th>Nama Obat</th>
+                                <th>Tgl Expired</th>
                                 <th>Quantity</th>
                                 <th>Catatan</th>
                             </thead>
@@ -144,17 +143,9 @@
                 "targets": [6],
                 "orderable": false
             },
-            {
-                "targets": [7],
-                "orderable": false
-            },
-            {
-                "targets": [8],
-                "orderable": false
-            },
         ],
         "ajax": {
-            "url": "<?= base_url("transaksi/apotek/pemesanan/get_data") ?>",
+            "url": "<?= base_url("transaksi/apotek/obat-keluar/get_data") ?>",
             "type": "POST"
         },
         "columns": [{
@@ -172,12 +163,7 @@
                 render: function(data, type, row, meta) {
                     let tombol = ''
                     let disabled = ''
-                    if (row.status_suplier != 'MENUNGGU') {
-                        disabled = 'disabled'
-                    }
-                    tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"></i></span></a>&nbsp;`
-                    tombol += `<a href="<?= base_url("transaksi/apotek/pemesanan/ubah/") ?>${row.no_faktur}" type="button" title="Edit"  class="btn ${disabled} btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></a>&nbsp;`
-                    tombol += `<button ${disabled} type="button" title="Hapus" onclick="hapus('${row.no_faktur}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"></i> Detail</span></a>&nbsp;`
                     return tombol;
                 }
             },
@@ -188,16 +174,10 @@
                 "data": "tgl_faktur",
             },
             {
-                "data": "nama_suplier",
-            },
-            {
                 "data": "total_obat",
             },
             {
-                "data": "status_suplier",
-            },
-            {
-                "data": "nama_admin",
+                "data": "keterangan_pemesanan",
             },
             {
                 "data": "created_at",
@@ -336,7 +316,7 @@
         $("#modal_lihat").modal("show")
         $("#no_faktur").text(no_faktur)
         $.ajax({
-            url: "<?= base_url('transaksi/apotek/pemesanan/get/') ?>" + no_faktur,
+            url: "<?= base_url('transaksi/apotek/obat-keluar/get/') ?>" + no_faktur,
             type: "GET",
             dataType: "JSON",
             contentType: "application/json; charset=utf-8",
@@ -354,6 +334,7 @@
                             `<tr>
                             <td class="text-center">${z++}</td>
                             <td><span>${r.nama_obat}</span></td>
+                            <td><span>${r.tgl_expired}</span></td>
                             <td><span>${r.qty}</span></td>
                             <td><span>${r.catatan}</span></td>                        
                         </tr>`

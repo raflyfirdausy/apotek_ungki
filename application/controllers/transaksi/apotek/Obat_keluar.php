@@ -16,6 +16,8 @@ class Obat_keluar extends RFLController
         $this->load->model("TrKeluarDetail_model", "trKeluarDetail");
         $this->load->model("StokObat_model", "stokObat");
         $this->load->model("Transaksi_obat_model", "trTransaksi");
+        $this->load->model("VKeluar_model", "vKeluar");
+        $this->load->model("VTrDetailKeluar_model", "vKeluarDetail");
     }
 
     public function index()
@@ -26,15 +28,65 @@ class Obat_keluar extends RFLController
         $this->loadViewBack("transaksi/apotek/obat_keluar/data_obat", $data);
     }
 
+    public function get_data($status = NULL)
+    {
+        $id_suplier         = $this->userData->id_suplier;
+        $limit              = $this->input->post("length")  ?: 10;
+        $offset             = $this->input->post("start")   ?: 0;
+
+        $data               = $this->filterDataTable($this->vKeluar)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTable($this->vKeluar)->order_by("id", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->vKeluar->count_rows() ?: 0;
+
+        echo json_encode([
+            "draw"              => $this->input->post("draw", TRUE),
+            "data"              => $data,
+            "recordsFiltered"   => $dataFilter,
+            "recordsTotal"      => $dataCountAll,
+        ]);
+    }
+
+    public function filterDataTable($model)
+    {
+        $inputKolom     = $this->input->post("columns");
+        $no_faktur      = isset($inputKolom) ? $inputKolom[2]["search"]["value"] : "";
+        $tanggal        = isset($inputKolom) ? $inputKolom[3]["search"]["value"] : "";
+        $total          = isset($inputKolom) ? $inputKolom[4]["search"]["value"] : "";
+        $status         = isset($inputKolom) ? $inputKolom[5]["search"]["value"] : "";
+        $created_at     = isset($inputKolom) ? $inputKolom[6]["search"]["value"] : "";
+
+        if (!empty($no_faktur)) {
+            $model = $model->where("LOWER(no_faktur)", "LIKE", strtolower($no_faktur));
+        }
+
+        if (!empty($tanggal)) {
+            $model = $model->where("LOWER(tgl_faktur)", "LIKE", strtolower($tanggal));
+        }
+
+        if (!empty($total)) {
+            $model = $model->where("LOWER(total_obat)", "LIKE", strtolower($total));
+        }
+
+        if (!empty($status)) {
+            $model = $model->where("LOWER(status_suplier)", "LIKE", strtolower($status));
+        }
+
+        if (!empty($created_at)) {
+            $model = $model->where("LOWER(created_at)", "LIKE", strtolower($created_at));
+        }
+
+        return $model;
+    }
+
     public function tambah()
     {
         $noFaktur = "KLR" . date("ymd") . "0001";
         $getKode = $this->trKeluar->where("no_faktur", "LIKE", date("ymd"))->order_by("no_faktur", "DESC")->get();
-        $obat = $this->vObat->get_all();
+        $obat = $this->vObat->where("stok", ">", 0)->get_all();
         if ($getKode) {
             $lastKode = (int) substr($getKode["no_faktur"], -4);
             $noFaktur = "KLR" . date("ymd") . str_pad((string)($lastKode + 1), 4, "0", STR_PAD_LEFT);
-        }        
+        }
 
         $data = [
             "no_faktur"     => $noFaktur,
@@ -47,12 +99,13 @@ class Obat_keluar extends RFLController
     public function tambah_proses()
     {
         // d($_POST);
-        $id_admin       = $this->userData->id;
-        $no_faktur      = $this->input->post("no_faktur");
-        $catatan        = $this->input->post("catatan");
-        $id_obat        = $this->input->post("id_obat");
-        $quantity_obat  = $this->input->post("quantity_obat");
-        $catatan_detail = $this->input->post("catatan_detail");
+        $id_admin               = $this->userData->id;
+        $no_faktur              = $this->input->post("no_faktur");
+        $catatan                = $this->input->post("catatan");
+        $id_obat                = $this->input->post("id_obat");
+        $quantity_obat          = $this->input->post("quantity_obat");
+        $catatan_detail         = $this->input->post("catatan_detail");
+        $keterangan_pemesanan   = $this->input->post("keterangan_pemesanan");
 
 
         //TODO : VALIDASI BARANG, MINIMAL 1
@@ -133,9 +186,10 @@ class Obat_keluar extends RFLController
         } else {
             //TODO : INSERT INTO TR KELUAR
             $dataInsert = [
-                "id_admin"   => $id_admin,
-                "no_faktur"  => $no_faktur,
-                "tgl_faktur" => date("Y-m-d"),
+                "id_admin"              => $id_admin,
+                "no_faktur"             => $no_faktur,
+                "tgl_faktur"            => date("Y-m-d"),
+                "keterangan_pemesanan"  => $keterangan_pemesanan
             ];
 
             $insertKeluar = $this->trKeluar->insert($dataInsert);
@@ -147,9 +201,8 @@ class Obat_keluar extends RFLController
                 die;
             }
 
-            $insertKeluar = "2";
-
             foreach ($dataDetail as $dd) {
+                $dd["detail"]["id_pemesanan"]   = $insertKeluar;
                 //SET DETAIL ID PEMESANAN FOR INSERT KELUAR DETAIL                                
                 //TODO : KURANGIN DATA STOKNYA
                 $idStok         = $dd["stok_obat"]["id"];
@@ -185,9 +238,10 @@ class Obat_keluar extends RFLController
 
     public function ambilObat($io, $offset, $sisaObat, $catatan, $return = [])
     {
-        $cekStok = $this->stokObat->where(["id_obat" => $io])->order_by("tgl_expired", "ASC")->limit(1, $offset)->get();
+        $cekStok = $this->stokObat->where(["id_obat" => $io])->where("stok", ">", 0)->order_by("tgl_expired", "ASC")->limit(1, $offset)->get();
         $offsetPlus = $offset + 1;
 
+        if ($sisaObat == 0) return $return;
         if ($cekStok["stok"] >= $sisaObat) {
 
             //TODO : KURANGI STOK BERDASARKAN PERMINTAAN OBAT AJAX
@@ -242,6 +296,28 @@ class Obat_keluar extends RFLController
             ]);
 
             return $this->ambilObat($io, $offsetPlus, $sisaObat, $catatan, $return);
+        }
+    }
+
+    public function get($noFaktur = NULL)
+    {
+        $data = $this->vKeluarDetail
+            ->where(["no_faktur" => $noFaktur])
+            ->order_by("id", "ASC")
+            ->as_array()
+            ->get_all();
+
+        if ($data) {
+            echo json_encode([
+                "code"      => 200,
+                "message"   => "Data ditemukan",
+                "data"      => $data
+            ]);
+        } else {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Data tidak ditemukan"
+            ]);
         }
     }
 }

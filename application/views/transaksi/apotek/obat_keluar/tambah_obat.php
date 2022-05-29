@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <label for="recipient-name" class="control-label">Catatan</label>
-                                    <textarea type="text" class="form-control" name="catatan" rows="1" id="catatan"></textarea>
+                                    <textarea type="text" class="form-control" name="keterangan_pemesanan" rows="1" id="catatan"></textarea>
                                 </div>
                             </div>
                         </div>
