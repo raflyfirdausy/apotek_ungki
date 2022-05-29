@@ -35,8 +35,7 @@
         <div class="container-fluid">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <a href="<?= back() ?>" type="button" class="btn btn-primary float-left"><i class="fas fa-chevron-left"></i> Kembali</a>
-                    <a href="<?= base_url("transaksi/apotek/obat-keluar/tambah") ?>" type="button" class="btn btn-success float-right"><i class="fas fa-plus"></i> Tambah Data <?= $title ?></a>
+                    <a href="<?= back() ?>" type="button" class="btn btn-primary float-left"><i class="fas fa-chevron-left"></i> Kembali</a>                    
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
