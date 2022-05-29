@@ -146,63 +146,63 @@ class Pre_order extends SuplierController
                     "tgl_expired"   => $tgl_expired[$index]
                 ]);
 
-            $cek = $this->stokObat->where([
-                "id_obat"       => $id_obat[$index],
-                "tgl_expired"   => $tgl_expired[$index]
-            ])->get();
+            // $cek = $this->stokObat->where([
+            //     "id_obat"       => $id_obat[$index],
+            //     "tgl_expired"   => $tgl_expired[$index]
+            // ])->get();
 
-            $currentStok = $qty_acc[$index];
-            if ($cek) {
-                $currentStok += $cek["stok"];
+            // $currentStok = $qty_acc[$index];
+            // if ($cek) {
+            //     $currentStok += $cek["stok"];
 
-                //TODO : UPDATE STOK OBAT
-                $update = $this->stokObat->where(["id" => $cek["id"],])->update(["stok" => $currentStok]);
-                if (!$update) {
-                    echo json_encode([
-                        "code"      => 503,
-                        "message"   => "Stok obat gagal diperbaharui. Silahkan hubungi Programmer!"
-                    ]);
-                    die;
-                }
+            //     //TODO : UPDATE STOK OBAT
+            //     $update = $this->stokObat->where(["id" => $cek["id"],])->update(["stok" => $currentStok]);
+            //     if (!$update) {
+            //         echo json_encode([
+            //             "code"      => 503,
+            //             "message"   => "Stok obat gagal diperbaharui. Silahkan hubungi Programmer!"
+            //         ]);
+            //         die;
+            //     }
 
-                //TODO : INSERT INTO TR_TRANSAKSI_OBAT
-                $this->trObat->insert([
-                    "id_admin"      => $this->userData->id,
-                    "id_obat"       => $id_obat[$index],
-                    "id_stok"       => $cek["id"],
-                    "tanggal"       => date("Y-m-d"),
-                    "stok_awal"     => $cek["stok"],
-                    "stok_akhir"    => $currentStok,
-                    "jenis"         => "TAMBAH BY PO",
-                    "keterangan"    => "Penambahan stok obat oleh suplier"
-                ]);
-            } else {
-                $insert = $this->stokObat->insert([
-                    "id_obat"       => $id_obat[$index],
-                    "stok"          => $currentStok,
-                    "tgl_expired"   => $tgl_expired[$index]
-                ]);
+            //     //TODO : INSERT INTO TR_TRANSAKSI_OBAT
+            //     $this->trObat->insert([
+            //         "id_admin"      => $this->userData->id,
+            //         "id_obat"       => $id_obat[$index],
+            //         "id_stok"       => $cek["id"],
+            //         "tanggal"       => date("Y-m-d"),
+            //         "stok_awal"     => $cek["stok"],
+            //         "stok_akhir"    => $currentStok,
+            //         "jenis"         => "TAMBAH BY PO",
+            //         "keterangan"    => "Penambahan stok obat oleh suplier"
+            //     ]);
+            // } else {
+            //     $insert = $this->stokObat->insert([
+            //         "id_obat"       => $id_obat[$index],
+            //         "stok"          => $currentStok,
+            //         "tgl_expired"   => $tgl_expired[$index]
+            //     ]);
 
-                if (!$insert) {
-                    echo json_encode([
-                        "code"      => 503,
-                        "message"   => "Stok obat gagal diperbaharui. Silahkan hubungi Programmer!"
-                    ]);
-                    die;
-                }
+            //     if (!$insert) {
+            //         echo json_encode([
+            //             "code"      => 503,
+            //             "message"   => "Stok obat gagal diperbaharui. Silahkan hubungi Programmer!"
+            //         ]);
+            //         die;
+            //     }
 
-                //TODO : INSERT INTO TR_TRANSAKSI_OBAT
-                $this->trObat->insert([
-                    "id_admin"      => $this->userData->id,
-                    "id_obat"       => $id_obat[$index],
-                    "id_stok"       => $cek["id"],
-                    "tanggal"       => date("Y-m-d"),
-                    "stok_awal"     => $cek["stok"],
-                    "stok_akhir"    => $currentStok,
-                    "jenis"         => "TAMBAH BY PO",
-                    "keterangan"    => "Penambahan stok obat oleh suplier"
-                ]);
-            }
+            //     //TODO : INSERT INTO TR_TRANSAKSI_OBAT
+            //     $this->trObat->insert([
+            //         "id_admin"      => $this->userData->id,
+            //         "id_obat"       => $id_obat[$index],
+            //         "id_stok"       => $cek["id"],
+            //         "tanggal"       => date("Y-m-d"),
+            //         "stok_awal"     => $cek["stok"],
+            //         "stok_akhir"    => $currentStok,
+            //         "jenis"         => "TAMBAH BY PO",
+            //         "keterangan"    => "Penambahan stok obat oleh suplier"
+            //     ]);
+            // }
 
             $index++;
         }
