@@ -47,6 +47,7 @@
                                     <th>Tanggal Expired</th>
                                     <th>Stok Obat</th>
                                     <th>Satuan</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -98,6 +99,10 @@
                 "targets": [4],
                 "orderable": false
             },
+            {
+                "targets": [5],
+                "orderable": false
+            },
         ],
         "ajax": {
             "url": "<?= base_url("laporan/apotek/obat-kadaluarsa/get_data") ?>",
@@ -122,7 +127,25 @@
             },
             {
                 "data": "nama_satuan",
-            },           
+            },
+            {
+                "data": "interval",
+                "sortable": false,
+                className: "text-center align-middle",
+                render: function(data, type, row, meta) {
+                    data *= -1
+                    let color = "danger"
+                    text = data
+                    if (data > 0) {
+                        color = "warning"
+                        text = "+" + data
+                    }
+
+                    let component = `<span class="badge badge-${color}">${text} Hari</span>`
+                    // return component
+                    return component
+                }
+            },
         ]
     })
 
@@ -130,7 +153,7 @@
         $('#table_data thead tr').clone(true).appendTo('#table_data thead');
         $('#table_data thead tr:eq(1) th').each(function(i) {
             var title = $(this).text();
-            if (i == 0) {
+            if (i == 0 || i == 5) {
                 $(this).html('');
             } else {
                 $(this).html(`<input class="form-control" style="width: 100%" type="text" placeholder="Cari ${title}" />`);

@@ -12,7 +12,7 @@ class Obat_kadaluarsa extends RFLController
     public function index()
     {
         $data = [
-            "title"     => "Data Obat Kadaluarsa",
+            "title"     => "Data Obat Akan Kadaluarsa dan sudah kadaluarsa",
         ];
         $this->loadViewBack("laporan/apotek/obat_kadaluarsa/data_kadaluarsa", $data);
     }
@@ -25,6 +25,18 @@ class Obat_kadaluarsa extends RFLController
         $data               = $this->filterDataTable($this->vKadaluarsa)->as_array()->limit($limit, $offset)->get_all() ?: [];
         $dataFilter         = $this->filterDataTable($this->vKadaluarsa)->count_rows() ?: 0;
         $dataCountAll       = $this->vKadaluarsa->count_rows() ?: 0;
+
+        for ($i = 0; $i < sizeof($data); $i++) {
+            // $date1 = new DateTime($data[$i]["tgl_expired"]);
+            // $date2 = new DateTime(date("Y-m-d"));
+            // $data[$i]["interval"] = $date1->diff($date2);
+
+            $now = time(); // or your date as well
+            $your_date = strtotime($data[$i]["tgl_expired"]);
+            $datediff = $now - $your_date;
+
+            $data[$i]["interval"]  = round($datediff / (60 * 60 * 24));
+        }
 
         echo json_encode([
             "draw"              => $this->input->post("draw", TRUE),
@@ -53,7 +65,7 @@ class Obat_kadaluarsa extends RFLController
         if (!empty($tgl_expired)) {
             $model = $model->where("LOWER(tgl_expired)", "LIKE", strtolower($tgl_expired));
         }
-        
+
         if (!empty($nama_satuan)) {
             $model = $model->where("LOWER(nama_satuan)", "LIKE", strtolower($nama_satuan));
         }
