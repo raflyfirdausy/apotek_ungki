@@ -10,6 +10,20 @@ class Transaksi_obat_model extends Custom_model
 
     public function __construct()
     {
-        parent::__construct();      
+        parent::__construct();
+
+        $this->has_one['admin'] = array(
+            'foreign_model'     => 'Admin_model',
+            'foreign_table'     => 'm_admin',
+            'foreign_key'       => 'id',
+            'local_key'         => 'id_admin'
+        );
+
+        $this->has_one['obat'] = array(
+            'foreign_model'     => 'Obat_model',
+            'foreign_table'     => 'm_obat',
+            'foreign_key'       => 'id',
+            'local_key'         => 'id_obat'
+        );
     }
 }
