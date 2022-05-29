@@ -108,18 +108,12 @@
 
     <li class="nav-header">Laporan Apotek</li>
 
-    <!-- <li class="nav-item">
-        <a href="<?= base_url("laporan/apotek/data-obat") ?>" class="nav-link">
-            <i class="nav-icon fas fa-file-alt"></i>
-            <p>Data obat</p>
-        </a>
-    </li>
     <li class="nav-item">
         <a href="<?= base_url("laporan/apotek/obat-kadaluarsa") ?>" class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i>
             <p>Obat Kadaluarsa</p>
         </a>
-    </li> -->
+    </li>
     <li class="nav-item">
         <a href="<?= base_url("laporan/apotek/mutasi-obat") ?>" class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i>

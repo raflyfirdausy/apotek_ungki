@@ -238,7 +238,13 @@ class Obat_keluar extends RFLController
 
     public function ambilObat($io, $offset, $sisaObat, $catatan, $return = [])
     {
-        $cekStok = $this->stokObat->where(["id_obat" => $io])->where("stok", ">", 0)->order_by("tgl_expired", "ASC")->limit(1, $offset)->get();
+        $cekStok = $this->stokObat
+            ->where(["id_obat" => $io])
+            ->where("stok", ">", 0)
+            ->where("tgl_expired", ">=", date("Y-m-d"))
+            ->order_by("tgl_expired", "ASC")
+            ->limit(1, $offset)->get();
+            
         $offsetPlus = $offset + 1;
 
         if ($sisaObat == 0) return $return;

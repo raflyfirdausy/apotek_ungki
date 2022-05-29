@@ -107,9 +107,9 @@ class Stok extends RFLController
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->order_by("tgl_expired", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->order_by("tgl_expired", "DESC")->count_rows() ?: 0;
-        $dataCountAll       = $this->vStok->count_rows() ?: 0;
+        $data               = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->where("stok", ">", 0)->order_by("tgl_expired", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->where("stok", ">", 0)->order_by("tgl_expired", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->vStok->where(["id_obat" => $id_obat])->where("stok", ">", 0)->count_rows() ?: 0;
 
         echo json_encode([
             "draw"              => $this->input->post("draw", TRUE),
@@ -141,8 +141,7 @@ class Stok extends RFLController
 
         if (!empty($exp)) {
             $model = $model->where("LOWER(tgl_expired)", "LIKE", strtolower($exp));
-        }
-
+        }        
 
         return $model;
     }
