@@ -3,7 +3,7 @@
     <li class="nav-item">
         <a href="<?= base_url("transaksi/suplier/pre-order/belum") ?>" class="nav-link">
             <i class="nav-icon fas fa-users-cog"></i>
-            <p>Belum di proses</p>
+            <p>PO Pesanan Masuk</p>
         </a>
     </li>
     <li class="nav-item">
@@ -15,7 +15,7 @@
     <li class="nav-item">
         <a href="<?= base_url("transaksi/suplier/pre-order/tolak") ?>" class="nav-link">
             <i class="nav-icon fas fa-users-cog"></i>
-            <p>Di Tolak</p>
+            <p>PO Tolak</p>
         </a>
     </li>
 <?php endif ?>
