@@ -114,7 +114,7 @@
         setupData()
     })
 
-    const setupData = () => {        
+    const setupData = () => {
         $.ajax({
             url: '<?= base_url('transaksi/apotek/pemesanan/get/' . $pemesanan_obat["no_faktur"]) ?>',
             type: "GET",
@@ -192,7 +192,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <input type="number" step="any" class="form-control quantity_obat" id="quantity_obat_${currentForm}" name="quantity_obat[]" placeholder="Quantity obat" required>
+                    <input type="number" step="any" min="0" class="form-control quantity_obat" id="quantity_obat_${currentForm}" name="quantity_obat[]" placeholder="Quantity obat" required>
                 </div>
                 <div class="col-md-5">
                     <input type="text" class="form-control" id="catatan_detail_${currentForm}" name="catatan_detail[]" placeholder="Catatan">
@@ -213,7 +213,7 @@
         reset()
     })
 
-    $("#form_addX").submit(e => {
+    $("#form_add").submit(e => {
         e.preventDefault()
         $.ajax({
             type: "POST",
@@ -226,9 +226,9 @@
                             icon: 'success',
                             title: 'Sukses',
                             text: `${result["message"]}`,
-                            confirmButtonText: 'Okesiap !',
+                            confirmButtonText: 'Oke !',
                         })
-                        .then((result) => {                            
+                        .then((result) => {
                             window.location.href = "<?= base_url('transaksi/suplier/pre-order/belum') ?>";
                         })
                 } else {

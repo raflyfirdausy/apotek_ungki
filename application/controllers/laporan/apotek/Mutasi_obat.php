@@ -11,20 +11,38 @@ class Mutasi_obat extends RFLController
 
     public function index()
     {
+        if (empty($_GET)) {
+            $awal       = date("Y-m-") . "01";
+            $akhir      = date("Y-m-d");
+        } else {
+            $awal       = $this->input->get("awal");
+            $akhir      = $this->input->get("akhir");
+        }
+
         $data = [
             "title"     => "Mutasi Obat",
+            "awal"      => $awal,
+            "akhir"     => $akhir
         ];
         $this->loadViewBack("laporan/apotek/mutasi_obat/data_mutasi", $data);
     }
 
-    public function get_data($status = NULL)
+    public function get_data()
     {
+        if (empty($_GET)) {
+            $awal       = date("Y-m-") . "01";
+            $akhir      = date("Y-m-d");
+        } else {
+            $awal       = $this->input->get("awal");
+            $akhir      = $this->input->get("akhir");
+        }
+
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTable($this->vTansaksi)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTable($this->vTansaksi)->order_by("id", "DESC")->count_rows() ?: 0;
-        $dataCountAll       = $this->vTansaksi->count_rows() ?: 0;
+        $data               = $this->filterDataTable($this->vTansaksi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTable($this->vTansaksi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->order_by("id", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->vTansaksi->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->count_rows() ?: 0;
 
         echo json_encode([
             "draw"              => $this->input->post("draw", TRUE),
@@ -60,7 +78,7 @@ class Mutasi_obat extends RFLController
         if (!empty($keterangan)) {
             $model = $model->where("LOWER(keterangan)", "LIKE", strtolower($keterangan));
         }
-        
+
         if (!empty($jenis)) {
             $model = $model->where("LOWER(jenis)", "LIKE", strtolower($jenis));
         }

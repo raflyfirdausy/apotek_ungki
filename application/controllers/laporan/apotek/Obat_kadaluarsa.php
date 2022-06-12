@@ -11,26 +11,39 @@ class Obat_kadaluarsa extends RFLController
 
     public function index()
     {
+        if (empty($_GET)) {
+            $awal       = date("Y-m-") . "01";
+            $akhir      = date("Y-m-d");
+        } else {
+            $awal       = $this->input->get("awal");
+            $akhir      = $this->input->get("akhir");
+        }
         $data = [
             "title"     => "Data Obat Akan Kadaluarsa dan sudah kadaluarsa",
+            "awal"      => $awal,
+            "akhir"     => $akhir
         ];
         $this->loadViewBack("laporan/apotek/obat_kadaluarsa/data_kadaluarsa", $data);
     }
 
     public function get_data($status = NULL)
     {
+        if (empty($_GET)) {
+            $awal       = date("Y-m-") . "01";
+            $akhir      = date("Y-m-d");
+        } else {
+            $awal       = $this->input->get("awal");
+            $akhir      = $this->input->get("akhir");
+        }
+
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTable($this->vKadaluarsa)->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTable($this->vKadaluarsa)->count_rows() ?: 0;
-        $dataCountAll       = $this->vKadaluarsa->count_rows() ?: 0;
+        $data               = $this->filterDataTable($this->vKadaluarsa)->where("tgl_expired", ">=", $awal)->where("tgl_expired", "<=", $akhir)->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTable($this->vKadaluarsa)->where("tgl_expired", ">=", $awal)->where("tgl_expired", "<=", $akhir)->count_rows() ?: 0;
+        $dataCountAll       = $this->vKadaluarsa->where("tgl_expired", ">=", $awal)->where("tgl_expired", "<=", $akhir)->count_rows() ?: 0;
 
         for ($i = 0; $i < sizeof($data); $i++) {
-            // $date1 = new DateTime($data[$i]["tgl_expired"]);
-            // $date2 = new DateTime(date("Y-m-d"));
-            // $data[$i]["interval"] = $date1->diff($date2);
-
             $now = time(); // or your date as well
             $your_date = strtotime($data[$i]["tgl_expired"]);
             $datediff = $now - $your_date;

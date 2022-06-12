@@ -152,6 +152,14 @@ class Stok extends RFLController
         $stok           = $this->input->post("stok");
         $tgl_expired    = $this->input->post("tgl_expired");
 
+        if($stok < 1){
+            echo json_encode([
+                "code"      => 503,
+                "message"   => "Stok obat tidak boleh kurang dari 1. Silahkan periksa kembali !"
+            ]);
+            die;
+        }
+
         $cek = $this->stokObat->where([
             "id_obat"    => $id_obat,
             "tgl_expired" => $tgl_expired

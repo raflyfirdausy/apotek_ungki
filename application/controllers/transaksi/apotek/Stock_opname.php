@@ -162,11 +162,21 @@ class Stock_opname extends RFLController
     }
 
     public function execute()
-    {        
+    {
         $id_obat            = $this->input->post("id_obat");
         $id_stok            = $this->input->post("id_stok");
         $stok_sebenarnya    = $this->input->post("stok_sebenarnya");
         $stok_gudang        = $this->input->post("stok_gudang");
+
+        foreach ($stok_sebenarnya as $sb) {
+            if ($sb < 1) {
+                echo json_encode([
+                    "code"      => 404,
+                    "message"   => "Terjadi kesalahan saat melakukan stok opname. Keterangan : Stok Sebenarnya tidak boleh kurang dari 1"
+                ]);
+                die;
+            }
+        }
 
         $index = 0;
         foreach ($id_stok as $id) {

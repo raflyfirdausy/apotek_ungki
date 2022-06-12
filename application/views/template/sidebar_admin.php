@@ -107,7 +107,18 @@
     </li>
 
     <li class="nav-header">Laporan Apotek</li>
-
+    <li class="nav-item">
+        <a href="<?= base_url("laporan/apotek/pemesanan-obat") ?>" class="nav-link">
+            <i class="nav-icon fas fa-file-alt"></i>
+            <p>Pemesanan Obat</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="<?= base_url("laporan/apotek/obat-keluar") ?>" class="nav-link">
+            <i class="nav-icon fas fa-file-alt"></i>
+            <p>Obat keluar</p>
+        </a>
+    </li>
     <li class="nav-item">
         <a href="<?= base_url("laporan/apotek/obat-kadaluarsa") ?>" class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i>

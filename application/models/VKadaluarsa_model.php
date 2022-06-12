@@ -11,5 +11,12 @@ class VKadaluarsa_model extends Custom_model
     public function __construct()
     {
         parent::__construct();
+
+        $this->has_one['obat'] = array(
+            'foreign_model'     => 'Obat_model',
+            'foreign_table'     => 'm_obat',
+            'foreign_key'       => 'id',
+            'local_key'         => 'id_obat'
+        );
     }
 }

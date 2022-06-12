@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label for="recipient-name" class="control-label">Stok Sebenarnya</label>
-                                        <input required name="stok_sebenarnya[]" placeholder="Masukan stok sebenarnya" class="form-control" type="number">
+                                        <input required name="stok_sebenarnya[]" min="1" placeholder="Masukan stok sebenarnya" class="form-control" type="number">
                                     </div>
                                     <input type="hidden" name="id_stok[]" value="<?= $s["id"] ?>">
                                 <?php endforeach ?>

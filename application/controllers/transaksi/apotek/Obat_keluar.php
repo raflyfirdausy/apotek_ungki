@@ -125,6 +125,14 @@ class Obat_keluar extends RFLController
                 ]);
                 die;
             }
+
+            if($qo < 1){
+                echo json_encode([
+                    "code"      => 404,
+                    "message"   => "Terjadi kesalahan pada saat penambahan obat keluar. Keterangan : Quantity tidak boleh kurang dari 1"
+                ]);
+                die;
+            }
         }
 
 

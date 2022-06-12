@@ -184,6 +184,16 @@ class Pemesanan extends RFLController
         $quantity_obat      = $this->input->post("quantity_obat");
         $catatan_detail     = $this->input->post("catatan_detail");
 
+        foreach($quantity_obat as $qty){
+            if($qty < 1){
+                echo json_encode([
+                    "code"      => 404,
+                    "message"   => "Terjadi kesalahan saat melakukan pemesanan obat. Keterangan : Quantity tidak boleh kurang dari 1"
+                ]);
+                die;
+            }
+        }
+
         $index                  = 0;
         $dataPemesananDetail    = [];
         foreach ($id_obat as $io) {

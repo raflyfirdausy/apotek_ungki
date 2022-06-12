@@ -128,6 +128,16 @@ class Pre_order extends SuplierController
         $tgl_expired    = $this->input->post("tgl_expired");
         $id_obat        = $this->input->post("id_obat");
 
+        foreach ($qty_acc as $q) {
+            if ($q < 0) {
+                echo json_encode([
+                    "code"      => 404,
+                    "message"   => "Terjadi kesalahan saat melakukan pemesanan obat. Keterangan : quantity obat tidak boleh kurang dari 0"
+                ]);
+                die;
+            }
+        }
+
         $update = $this->trPemesanan->where(["no_faktur" => $no_faktur])->update(["status_suplier" => "DI_TERIMA"]);
         if (!$update) {
             echo json_encode([
@@ -208,7 +218,12 @@ class Pre_order extends SuplierController
         }
 
         $this->session->set_flashdata("sukses", "Pemesanan berhasil terima");
-        redirect("transaksi/suplier/pre-order/belum");
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Pemesanan berhasil terima"
+        ]);
+        die;
+        // redirect("transaksi/suplier/pre-order/belum");
     }
 
     public function deny()

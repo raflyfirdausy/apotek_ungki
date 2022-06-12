@@ -90,7 +90,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" step="any" class="form-control quantity_obat" id="quantity_obat_1" name="quantity_obat[]" placeholder="Quantity obat" required>
+                                    <input type="number" min="1" step="any" class="form-control quantity_obat" id="quantity_obat_1" name="quantity_obat[]" placeholder="Quantity obat" required>
                                 </div>
                                 <div class="col-md-5">
                                     <input type="text" class="form-control" id="catatan_detail_1" name="catatan_detail[]" placeholder="Catatan">
@@ -156,7 +156,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <input type="number" step="any" class="form-control quantity_obat" id="quantity_obat_${currentForm}" name="quantity_obat[]" placeholder="Quantity obat" required>
+                    <input type="number" min="1" step="any" class="form-control quantity_obat" id="quantity_obat_${currentForm}" name="quantity_obat[]" placeholder="Quantity obat" required>
                 </div>
                 <div class="col-md-5">
                     <input type="text" class="form-control" id="catatan_detail_${currentForm}" name="catatan_detail[]" placeholder="Catatan">

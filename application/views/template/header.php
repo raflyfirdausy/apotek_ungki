@@ -41,6 +41,11 @@
     <script>
         var BASE_URL = "<?= base_url() ?>"
     </script>
+    <script src="<?= asset("lte/plugins/chart.js/Chart.min.js") ?>"></script>
+    <script src="<?= asset("lte/plugins/moment/moment.min.js") ?>"></script>
+    <script src="<?= asset("lte/plugins/daterangepicker/daterangepicker.js") ?>"></script>
+    <link href="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <script src="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -52,6 +57,27 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+                <?php if ($this->userData->level == "KARYAWAN" || $this->userData->level == "KEPALA_APOTEK") : ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-danger navbar-badge"><?= $this->kadaluarsa["total"] ?></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header"><?= $this->kadaluarsa["total"] ?> Obat Kadaluarsa</span>
+                            <div class="dropdown-divider"></div>
+                            <?php foreach ($this->kadaluarsa["sample"] as $ob) : ?>
+                                <a href="#" class="dropdown-item">
+                                    <?= $ob["obat"]["nama"] . " (" . $ob["stok"] . ")" ?>
+                                    <span class="float-right text-muted text-sm"><?= $ob["tgl_expired"] ?></span>
+                                </a>
+                            <?php endforeach ?>
+
+                            <div class="dropdown-divider"></div>
+                            <a href="<?= base_url("laporan/apotek/obat-kadaluarsa?awal=" . $this->kadaluarsa["awal"]["tgl_expired"] . "&akhir=" . $this->kadaluarsa["akhir"]["tgl_expired"]) ?>" class="dropdown-item dropdown-footer">Lihat semua data obat kadaluarsa</a>
+                        </div>
+                    </li>
+                <?php endif ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user"></i> <?= $this->userData->nama ?> (<?= str_replace('_', " ", $this->userData->level) ?>)

@@ -187,7 +187,7 @@
                             icon: 'success',
                             title: 'Sukses',
                             text: `${result["message"]}`,
-                            confirmButtonText: 'Okesiap !',
+                            confirmButtonText: 'Oke !',
                         })
                         .then((result) => {
                             window.location.href = "<?= base_url('transaksi/apotek/pemesanan') ?>";

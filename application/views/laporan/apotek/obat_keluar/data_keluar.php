@@ -33,7 +33,6 @@
 
 
         <div class="container-fluid">
-
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <a href="<?= back() ?>" type="button" class="btn btn-primary float-left"><i class="fas fa-chevron-left"></i> Kembali</a>
@@ -85,19 +84,19 @@
                 </form>
             </div>
 
-            <div class=" card card-primary card-outline">
+
+            <div class="card card-primary card-outline">
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="table_data" class="table table-sm nowrap table-bordered table-striped" style="width:100%">
                             <thead>
                                 <tr>
                                     <th class="text-center" style="width: 3%">No.</th>
-                                    <th>Nama Obat</th>
-                                    <th>Stok Awal</th>
-                                    <th>Stok Akhir</th>
-                                    <th>Keterangan</th>
-                                    <th>Jenis</th>
-                                    <th>Ditambahkan Oleh</th>
+                                    <th style="width: 8%">Aksi</th>
+                                    <th>No Faktur</th>
+                                    <th>Tanggal</th>
+                                    <th>Total Obat</th>
+                                    <th>Catatan</th>
                                     <th>Waktu Ditambahkan</th>
                                 </tr>
                             </thead>
@@ -109,6 +108,39 @@
     </section>
 </div>
 
+
+<div class="modal fade myModal" id="modal_lihat">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detail data obat keluar <b>(<span id="no_faktur"></span>)</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table style="width: 100%" class="table table-sm table-bordered table-hover" id="table_detail">
+                            <thead>
+                                <th width="5%">No.</th>
+                                <th>Nama Obat</th>
+                                <th>Tgl Expired</th>
+                                <th>Quantity</th>
+                                <th>Catatan</th>
+                            </thead>
+                            <tbody id="table_body_detail"></tbody>
+                            <tfoot id="table_foot_detail"></tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var table = $("#table_data").DataTable({
@@ -159,13 +191,9 @@
                 "targets": [6],
                 "orderable": false
             },
-            {
-                "targets": [7],
-                "orderable": false
-            },
         ],
         "ajax": {
-            "url": "<?= base_url("laporan/apotek/mutasi-obat/get_data?awal=$awal&akhir=$akhir") ?>",
+            "url": "<?= base_url("laporan/apotek/obat-keluar/get_data?awal=$awal&akhir=$akhir") ?>",
             "type": "POST"
         },
         "columns": [{
@@ -177,22 +205,27 @@
                 }
             },
             {
-                "data": "nama_obat",
+                "data": "id",
+                "sortable": false,
+                className: "text-center align-middle",
+                render: function(data, type, row, meta) {
+                    let tombol = ''
+                    let disabled = ''
+                    tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"></i> Detail</span></a>&nbsp;`
+                    return tombol;
+                }
             },
             {
-                "data": "stok_awal",
+                "data": "no_faktur",
             },
             {
-                "data": "stok_akhir",
+                "data": "tgl_faktur",
             },
             {
-                "data": "keterangan",
+                "data": "total_obat",
             },
             {
-                "data": "jenis",
-            },
-            {
-                "data": "nama_admin",
+                "data": "keterangan_pemesanan",
             },
             {
                 "data": "created_at",
@@ -205,7 +238,7 @@
         $('#table_data thead tr').clone(true).appendTo('#table_data thead');
         $('#table_data thead tr:eq(1) th').each(function(i) {
             var title = $(this).text();
-            if (i == 0) {
+            if (i == 0 || i == 1) {
                 $(this).html('');
             } else {
                 $(this).html(`<input class="form-control" style="width: 100%" type="text" placeholder="Cari ${title}" />`);
@@ -214,13 +247,155 @@
             $('input', this).on('keyup change', function(e) {
                 if (e.keyCode == 13) {
                     if (table.column(i).search() !== this.value) {
+                        console.log("asd")
                         table.column(i).search(this.value).draw();
                     }
                 }
             })
         })
     })
+
+    $("#form_add").submit(e => {
+        e.preventDefault()
+        var form = $('#form_add')[0]
+        var data = new FormData(form)
+
+        $(".add_btn").prop('disabled', true)
+        $(".add_btn").text("Sedang menyimpan data...")
+
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: "<?= base_url("master/apotek/pengguna/add") ?>",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result) {
+                console.log(result)
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: result.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    }).then((result) => {
+                        $('#form_add').trigger("reset");
+                        table.ajax.reload(null, false)
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: result.message,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    })
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                Swal.fire("Oops", xhr.responseText, "error")
+            }
+        })
+    })
+
+    $("#form_edit").submit(e => {
+        e.preventDefault()
+        var form = $('#form_edit')[0]
+        var data = new FormData(form)
+
+        $(".add_btn").prop('disabled', true)
+        $(".add_btn").text("Sedang menyimpan data...")
+
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: "<?= base_url("master/apotek/pengguna/edit") ?>",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result) {
+                console.log(result)
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: result.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    }).then((result) => {
+                        $('#form_edit').trigger("reset");
+                        $("#modal_edit").modal("hide")
+                        table.ajax.reload(null, false)
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: result.message,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke Siap !'
+                    })
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                Swal.fire("Oops", xhr.responseText, "error")
+            }
+        })
+    })
+
+    const modal_lihat = (no_faktur) => {
+        $("#modal_lihat").modal("show")
+        $("#no_faktur").text(no_faktur)
+        $.ajax({
+            url: "<?= base_url('transaksi/apotek/obat-keluar/get/') ?>" + no_faktur,
+            type: "GET",
+            dataType: "JSON",
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                $('#table_body_detail').html('');
+                $('#table_foot_detail').html('');
+                $('#footer_modal').html('');
+                if (response.code == 200) {
+                    let result = response.data
+                    var z = 1;
+                    for (var i in result) {
+                        var r = result[i];
+                        $('#table_body_detail').append(
+                            /*html*/
+                            `<tr>
+                            <td class="text-center">${z++}</td>
+                            <td><span>${r.nama_obat}</span></td>
+                            <td><span>${r.tgl_expired}</span></td>
+                            <td><span>${r.qty}</span></td>
+                            <td><span>${r.catatan}</span></td>                        
+                        </tr>`
+                        );
+                    }
+
+                }
+                $("#table_detail").DataTable();
+            }
+        });
+    }
 </script>
+
 
 <script>
     $("#awal_hari").keypress(function(event) {
