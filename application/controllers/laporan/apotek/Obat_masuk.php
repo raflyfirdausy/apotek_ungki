@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mutasi_obat extends RFLController
+class Obat_masuk extends RFLController
 {
     public function __construct()
     {
@@ -20,11 +20,11 @@ class Mutasi_obat extends RFLController
         }
 
         $data = [
-            "title"     => "Mutasi Obat",
+            "title"     => "Obat Masuk",
             "awal"      => $awal,
             "akhir"     => $akhir
         ];
-        $this->loadViewBack("laporan/apotek/mutasi_obat/data_mutasi", $data);
+        $this->loadViewBack("laporan/apotek/obat_masuk/data_masuk", $data);
     }
 
     public function get_data()
@@ -42,9 +42,10 @@ class Mutasi_obat extends RFLController
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTable($this->vTansaksi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTable($this->vTansaksi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->order_by("id", "DESC")->count_rows() ?: 0;
-        $dataCountAll       = $this->vTansaksi->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->count_rows() ?: 0;
+        $kondisi            = ["TAMBAH BY PO", "TAMBAH STOK"];
+        $data               = $this->filterDataTable($this->vTansaksi)->where("jenis", $kondisi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->order_by("id", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTable($this->vTansaksi)->where("jenis", $kondisi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->order_by("id", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->vTansaksi->where("jenis", $kondisi)->where("created_at", ">=", $awal)->where("created_at", "<=", $akhir)->count_rows() ?: 0;
 
         echo json_encode([
             "draw"              => $this->input->post("draw", TRUE),

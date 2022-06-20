@@ -47,7 +47,7 @@ class Obat_keluar extends RFLController
         } else {
             $awal       = $this->input->get("awal");
             $akhir      = $this->input->get("akhir");
-        }
+        }        
 
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;

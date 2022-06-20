@@ -179,8 +179,8 @@ class Stock_opname extends RFLController
         }
 
         $index = 0;
-        foreach ($id_stok as $id) {
-            $this->stok->where(["id" => $id])->update([
+        foreach ($id_stok as $ids) {
+            $this->stok->where(["id" => $ids])->update([
                 "stok" => $stok_sebenarnya[$index],
             ]);
 
@@ -188,6 +188,7 @@ class Stock_opname extends RFLController
             $this->trObat->insert([
                 "id_admin"      => $this->userData->id,
                 "id_obat"       => $id_obat,
+                "id_stok"       => $ids,
                 "tanggal"       => date("Y-m-d"),
                 "stok_awal"     => $stok_gudang[$index],
                 "stok_akhir"    => $stok_sebenarnya[$index],

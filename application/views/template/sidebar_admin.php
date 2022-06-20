@@ -108,6 +108,18 @@
 
     <li class="nav-header">Laporan Apotek</li>
     <li class="nav-item">
+        <a href="<?= base_url("laporan/apotek/obat-masuk") ?>" class="nav-link">
+            <i class="nav-icon fas fa-file-alt"></i>
+            <p>Obat Masuk</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="<?= base_url("laporan/apotek/stock-opname") ?>" class="nav-link">
+            <i class="nav-icon fas fa-file-alt"></i>
+            <p>Stok Opname</p>
+        </a>
+    </li>
+    <li class="nav-item">
         <a href="<?= base_url("laporan/apotek/pemesanan-obat") ?>" class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i>
             <p>Pemesanan Obat</p>
