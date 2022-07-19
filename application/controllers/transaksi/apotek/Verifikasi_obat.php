@@ -138,7 +138,7 @@ class Verifikasi_obat extends RFLController
                 $currentStok += $cek["stok"];
 
                 //TODO : UPDATE STOK OBAT
-                $update = $this->stokObat->where(["id" => $cek["id"],])->update(["stok" => $currentStok]);
+                $update = $this->stokObat->where(["id" => $cek["id"]])->update(["stok" => $currentStok]);
                 if (!$update) {
                     echo json_encode([
                         "code"      => 503,
