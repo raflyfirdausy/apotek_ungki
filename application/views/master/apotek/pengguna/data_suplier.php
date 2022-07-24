@@ -109,7 +109,7 @@
                                 <label for="recipient-name" class="control-label">Suplier <span class="text-danger">*</span></label>
                                 <select required class="form-control select2bs4" name="id_suplier" id="id_suplier">
                                     <option value="">-- PILIH SUPLIER --</option>
-                                    <?php foreach($suplier as $s) : ?>
+                                    <?php foreach ($suplier as $s) : ?>
                                         <option value="<?= $s["id"] ?>"><?= $s["nama"] ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -176,7 +176,7 @@
                                 <label for="recipient-name" class="control-label">Suplier <span class="text-danger">*</span></label>
                                 <select required class="form-control select2bs4" name="id_suplier" id="id_suplier_edit">
                                     <option value="">-- PILIH SUPLIER --</option>
-                                    <?php foreach($suplier as $s) : ?>
+                                    <?php foreach ($suplier as $s) : ?>
                                         <option value="<?= $s["id"] ?>"><?= $s["nama"] ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -267,7 +267,9 @@
                 render: function(data, type, row, meta) {
                     let tombol = ''
                     tombol += `<button type="button" title="Edit" onclick="modal_edit('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></button>&nbsp;`
-                    tombol += `<button type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    <?php if ($this->userData->level == "ADMIN") : ?>
+                        tombol += `<button type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    <?php endif ?>
                     return tombol;
                 }
             },

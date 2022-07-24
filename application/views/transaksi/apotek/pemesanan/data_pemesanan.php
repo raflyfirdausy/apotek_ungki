@@ -177,7 +177,9 @@
                     }
                     tombol += `<a type="button" title="Lihat" onclick="modal_lihat('${row.no_faktur}')" class="btn btn-sm btn-success waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-eye"></i></span></a>&nbsp;`
                     tombol += `<a href="<?= base_url("transaksi/apotek/pemesanan/ubah/") ?>${row.no_faktur}" type="button" title="Edit"  class="btn ${disabled} btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></a>&nbsp;`
-                    tombol += `<button ${disabled} type="button" title="Hapus" onclick="hapus('${row.no_faktur}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    <?php if ($this->userData->level == "ADMIN") : ?>
+                        tombol += `<button ${disabled} type="button" title="Hapus" onclick="hapus('${row.no_faktur}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    <?php endif ?>
                     return tombol;
                 }
             },

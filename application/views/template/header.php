@@ -57,7 +57,7 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <?php if ($this->userData->level == "KARYAWAN" || $this->userData->level == "KEPALA_APOTEK") : ?>
+                <?php if ($this->userData->level == "KARYAWAN" || $this->userData->level == "KEPALA_APOTEK" || $this->userData->level == "ADMIN") : ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
                             <i class="far fa-bell"></i>

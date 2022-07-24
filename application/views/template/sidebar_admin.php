@@ -1,4 +1,4 @@
-<?php if ($this->userData->level == "KARYAWAN" || $this->userData->level == "KEPALA_APOTEK") : ?>
+<?php if ($this->userData->level == "KARYAWAN" || $this->userData->level == "KEPALA_APOTEK" || $this->userData->level == "ADMIN") : ?>
     <li class="nav-header">Master Data Apotek</li>
     <li class="nav-item">
         <a href="<?= base_url("master/apotek/identitas") ?>" class="nav-link">

@@ -47,7 +47,7 @@
                                     <th>Nama</th>
                                     <th>Golongan</th>
                                     <th>Kategori</th>
-                                    <th>Satuan</th>                                    
+                                    <th>Satuan</th>
                                     <th>Minimal Stok</th>
                                     <th>Waktu Ditambahkan</th>
                                 </tr>
@@ -155,7 +155,9 @@
                 render: function(data, type, row, meta) {
                     let tombol = ''
                     tombol += `<a href="<?= base_url("master/apotek/obat/data/ubah/") ?>${row.kode_obat}" type="button" title="Edit" onclick="modal_edit('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-edit"></i></span></a>&nbsp;`
-                    tombol += `<button type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    <?php if ($this->userData->level == "ADMIN") : ?>
+                        tombol += `<button type="button" title="Hapus" onclick="hapus('${data}')" class="btn btn-sm btn-danger waves-effect waves-light" type="button"><span class="btn-label text-white"><i class="fas fa-trash"></i></span></button>&nbsp;`
+                    <?php endif ?>
                     return tombol;
                 }
             },
