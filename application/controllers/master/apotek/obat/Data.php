@@ -132,6 +132,15 @@ class Data extends RFLController
         $kandungan      = $this->input->post("kandungan");
         $efek_samping   = $this->input->post("efek_samping");
 
+
+        if($min_stok < 1){
+            echo json_encode([
+                "code"      => 503,
+                "message"   => "Minimal stock obat yang dimasukan adalah 1"
+            ]);
+            die;
+        }
+
         $cekKode = $this->obat->where(["kode_obat" => $kode])->get();
         if ($cekKode) {
             echo json_encode([

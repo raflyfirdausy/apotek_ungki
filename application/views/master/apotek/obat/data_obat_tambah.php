@@ -87,7 +87,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label text-right">Minimal Stok <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
-                                        <input required min="0" type="number" name="min_stok" class="form-control" placeholder="Minimal Stock Obat" value="">
+                                        <input required min="1" type="number" name="min_stok" class="form-control" placeholder="Minimal Stock Obat" value="">
                                     </div>
                                 </div>
                                 <div class="form-group row">
