@@ -69,7 +69,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="recipient-name" class="control-label">Stok <span class="text-danger">*</span></label>
-                                <input type="number" min="0" class="form-control" name="stok" id="stok" required>
+                                <input type="number" min="1" class="form-control" name="stok" id="stok" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="recipient-name" class="control-label">Tanggal Expired </label>
