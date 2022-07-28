@@ -79,7 +79,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="recipient-name" class="control-label">Lokasi Obat </label>
-                                <select required name="lokasi" id="lokasi" class="form-control select2bs4">
+                                <select required name="lokasi" class="form-control select2bs4">
                                     <option selected value="">-- PILIH LOKASI --</option>
                                     <?php foreach ($lokasi as $l) : ?>
                                         <option value="<?= $l["id"] ?>"><?= $l["nama"] ?></option>
