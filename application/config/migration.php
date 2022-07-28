@@ -43,7 +43,7 @@ $config['migration_type'] = 'sequential';
 | will migrate up. This must be set.
 |
 */
-$config['migration_table'] = 'intanmas_migration';
+$config['migration_table'] = 'sipotek_migrations';
 
 /*
 |--------------------------------------------------------------------------

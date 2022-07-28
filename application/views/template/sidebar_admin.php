@@ -67,6 +67,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="<?= base_url("master/apotek/obat/lokasi") ?>" class="nav-link">
+                    <p>Lokasi Obat</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<?= base_url("master/apotek/obat/data") ?>" class="nav-link">
                     <p>Obat Masuk</p>
                 </a>

@@ -11,5 +11,12 @@ class VStok_obat_model extends Custom_model
     public function __construct()
     {
         parent::__construct();
+
+        $this->has_one['lokasi'] = array(
+            'foreign_model'     => 'Lokasi_model',
+            'foreign_table'     => 'm_lokasi',
+            'foreign_key'       => 'id',
+            'local_key'         => 'id_lokasi'
+        );
     }
 }

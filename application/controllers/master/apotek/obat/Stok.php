@@ -14,6 +14,7 @@ class Stok extends RFLController
         $this->load->model("StokObat_model", "stokObat");
         $this->load->model("Transaksi_obat_model", "trObat");
         $this->load->model("VStok_obat_model", "vStok");
+        $this->load->model("Lokasi_model", "lokasi");
     }
 
     public function index()
@@ -95,8 +96,9 @@ class Stok extends RFLController
         }
 
         $data = [
-            "title" => "Stok obat " . $cek["nama"] . " (" . $cek["kode_obat"] . ")",
-            "obat"  => $cek
+            "title"     => "Stok obat " . $cek["nama"] . " (" . $cek["kode_obat"] . ")",
+            "obat"      => $cek,
+            "lokasi"    => $this->lokasi->get_all()
         ];
 
         $this->loadViewBack("master/apotek/obat/stok_obat_detail", $data);
@@ -107,9 +109,9 @@ class Stok extends RFLController
         $limit              = $this->input->post("length")  ?: 10;
         $offset             = $this->input->post("start")   ?: 0;
 
-        $data               = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->where("stok", ">", 0)->order_by("tgl_expired", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
-        $dataFilter         = $this->filterDataTableDetail($this->vStok)->where(["id_obat" => $id_obat])->where("stok", ">", 0)->order_by("tgl_expired", "DESC")->count_rows() ?: 0;
-        $dataCountAll       = $this->vStok->where(["id_obat" => $id_obat])->where("stok", ">", 0)->count_rows() ?: 0;
+        $data               = $this->filterDataTableDetail($this->vStok->with_lokasi())->where(["id_obat" => $id_obat])->where("stok", ">", 0)->order_by("tgl_expired", "DESC")->as_array()->limit($limit, $offset)->get_all() ?: [];
+        $dataFilter         = $this->filterDataTableDetail($this->vStok->with_lokasi())->where(["id_obat" => $id_obat])->where("stok", ">", 0)->order_by("tgl_expired", "DESC")->count_rows() ?: 0;
+        $dataCountAll       = $this->vStok->with_lokasi()->where(["id_obat" => $id_obat])->where("stok", ">", 0)->count_rows() ?: 0;
 
         echo json_encode([
             "draw"              => $this->input->post("draw", TRUE),
@@ -141,7 +143,7 @@ class Stok extends RFLController
 
         if (!empty($exp)) {
             $model = $model->where("LOWER(tgl_expired)", "LIKE", strtolower($exp));
-        }        
+        }
 
         return $model;
     }
@@ -152,7 +154,10 @@ class Stok extends RFLController
         $stok           = $this->input->post("stok");
         $tgl_expired    = $this->input->post("tgl_expired");
 
-        if($stok < 1){
+        //! REVISI
+        $lokasi         = $this->input->post("lokasi");
+
+        if ($stok < 1) {
             echo json_encode([
                 "code"      => 503,
                 "message"   => "Stok obat tidak boleh kurang dari 1. Silahkan periksa kembali !"
@@ -168,8 +173,22 @@ class Stok extends RFLController
         if ($cek) {
             $stok += $cek["stok"];
 
+            $dataUpdate["stok"] = $stok;
+            if ($cek["id_lokasi"] == null) {
+                $dataUpdate["id_lokasi"] = $lokasi;
+            } else {
+                if ($cek["id_lokasi"] != $lokasi) {
+                    $lokasiSebelum = $this->lokasi->where(["id" => $cek["id_lokasi"]])->get();
+                    echo json_encode([
+                        "code"      => 503,
+                        "message"   => "Stok obat gagal diperbaharui. Stok obat harus di lokasi " . $lokasiSebelum["nama"]
+                    ]);
+                    die;
+                }
+            }
+
             //TODO : UPDATE STOK OBAT
-            $update = $this->stokObat->where(["id" => $cek["id"]])->update(["stok" => $stok]);
+            $update = $this->stokObat->where(["id" => $cek["id"]])->update($dataUpdate);
             if (!$update) {
                 echo json_encode([
                     "code"      => 503,
@@ -199,7 +218,8 @@ class Stok extends RFLController
             $insert = $this->stokObat->insert([
                 "id_obat"       => $id_obat,
                 "stok"          => $stok,
-                "tgl_expired"   => $tgl_expired
+                "tgl_expired"   => $tgl_expired,
+                "id_lokasi"     => $lokasi
             ]);
             if (!$insert) {
                 echo json_encode([
@@ -227,5 +247,18 @@ class Stok extends RFLController
             ]);
             die;
         }
+    }
+
+    public function edit_lokasi()
+    {
+        $id_data    = $this->input->post('id_data');
+        $lokasi     = $this->input->post('lokasi');
+
+        $this->stokObat->where(["id" => $id_data])->update(["id_lokasi" => $lokasi]);
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Berhasil mengubah data lokasi obat"
+        ]);
+        die;
     }
 }

@@ -4,11 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Data extends RFLController
 {
     public function __construct()
-    {
-        parent::__construct();
+    {        
+        parent::__construct();        
         $this->load->model("Golongan_obat_model", "golongan");
         $this->load->model("Kategori_obat_model", "kategori");
-        $this->load->model("Satuan_obat_model", "satuan");
+        $this->load->model("Satuan_obat_model", "satuan");        
         $this->load->model("Obat_model", "obat");
         $this->load->model("VObat_model", "vObat");
     }

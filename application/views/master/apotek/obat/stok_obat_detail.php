@@ -40,7 +40,9 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" style="width: 3%">No.</th>
+                                    <th>Aksi</th>
                                     <th>Nama Obat</th>
+                                    <th>Lokasi</th>
                                     <th>Stok</th>
                                     <th>Satuan</th>
                                     <th>Tanggal Expired</th>
@@ -75,11 +77,53 @@
                                 <label for="recipient-name" class="control-label">Tanggal Expired </label>
                                 <input type="date" class="form-control" name="tgl_expired" id="tgl_expired" required>
                             </div>
+                            <div class="col-md-12">
+                                <label for="recipient-name" class="control-label">Lokasi Obat </label>
+                                <select required name="lokasi" id="lokasi" class="form-control select2bs4">
+                                    <option selected value="">-- PILIH LOKASI --</option>
+                                    <?php foreach ($lokasi as $l) : ?>
+                                        <option value="<?= $l["id"] ?>"><?= $l["nama"] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <input type="hidden" name="id_obat" value="<?= $obat["id"] ?>">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary add_btn">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade myModal" id="modal_edit">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ubah Lokasi</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="<?= base_url("master/apotek/obat/lokasi/edit_lokasi") ?>" id="form_edit" enctype='multipart/form-data'>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="control-label">Lokasi Obat </label>
+                            <select required name="lokasi" id="lokasi" class="form-control select2bs4">
+                                <option selected value="">-- PILIH LOKASI --</option>
+                                <?php foreach ($lokasi as $l) : ?>
+                                    <option value="<?= $l["id"] ?>"><?= $l["nama"] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <input type="hidden" name="id_data" id="id_data_lokasi">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary add_btn">Simpan</button>
                 </div>
@@ -129,9 +173,17 @@
                 "targets": [4],
                 "orderable": false
             },
+            {
+                "targets": [5],
+                "orderable": false
+            },
+            {
+                "targets": [6],
+                "orderable": false
+            },
         ],
         "ajax": {
-            "url": "<?= base_url("master/apotek/obat/stok/get_data_detail/" . $obat["id"] ) ?>",
+            "url": "<?= base_url("master/apotek/obat/stok/get_data_detail/" . $obat["id"]) ?>",
             "type": "POST"
         },
         "columns": [{
@@ -143,7 +195,30 @@
                 }
             },
             {
+                "data": "id",
+                render: function(data, type, row, meta) {
+                    let tombol = ''
+
+                    <?php if ($this->userData->level == "ADMIN") : ?>
+                        tombol += `<button type="button" title="Edit" onclick="modal_edit('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button">Ubah Lokasi <span class="btn-label text-white"><i class="fas fa-edit"></i></span></button>&nbsp;`
+                    <?php else : ?>
+                        tombol += `<button disabled type="button" title="Edit" onclick="modal_edit('${data}')" class="btn btn-sm btn-info waves-effect waves-light" type="button">Ubah Lokasi <span class="btn-label text-white"><i class="fas fa-edit"></i></span></button>&nbsp;`
+                    <?php endif ?>
+                    return tombol;
+                }
+            },
+            {
                 "data": "nama_obat",
+            },
+            {
+                "data": "lokasi",
+                render: function(data, type, row, meta) {
+                    if (typeof data != "undefined") {
+                        return data.nama
+                    } else {
+                        return "-"
+                    }
+                }
             },
             {
                 "data": "stok",
@@ -151,6 +226,7 @@
             {
                 "data": "nama_satuan",
             },
+
             {
                 "data": "tgl_expired",
             },
@@ -177,6 +253,12 @@
             })
         })
     })
+
+    const modal_edit = (id) => {
+        $("#id_data_lokasi").val(id)
+        $("#modal_edit").modal("show")
+    }
+
 
     $("#form_add").submit(e => {
         e.preventDefault()
@@ -230,4 +312,58 @@
             }
         })
     })
+    $("#form_edit").submit(e => {
+        e.preventDefault()
+        var form = $('#form_edit')[0]
+        var data = new FormData(form)
+
+        $(".add_btn").prop('disabled', true)
+        $(".add_btn").text("Sedang menyimpan data...")
+
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: "<?= base_url("master/apotek/obat/stok/edit_lokasi") ?>",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result) {
+                console.log(result)
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: result.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke!'
+                    }).then((result) => {
+                        $('#form_add').trigger("reset");
+                        $("#modal_edit").modal("hide")
+                        table.ajax.reload(null, false)
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: result.message,
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke!'
+                    })
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".add_btn").prop('disabled', false)
+                $(".add_btn").text("Simpan")
+                Swal.fire("Oops", xhr.responseText, "error")
+            }
+        })
+    })
+
+
 </script>

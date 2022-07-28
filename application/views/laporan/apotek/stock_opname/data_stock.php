@@ -92,9 +92,11 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" style="width: 3%">No.</th>
+                                    <th>Action</th>
                                     <th>Nama Obat</th>
                                     <th>Stok Awal</th>
                                     <th>Stok Akhir</th>
+                                    <th>Selisih Stok</th>
                                     <th>Keterangan</th>
                                     <th>Jenis</th>
                                     <th>Ditambahkan Oleh</th>
@@ -184,6 +186,20 @@
             },
             {
                 "data": "stok_akhir",
+            },
+            {
+                "data": "stok_akhir",
+                render: function(data, type, row, meta) {
+                    let selisih = row.stok_awal - row.stok_akhir
+                    let warna = "success"
+                    if(selisih < 0){
+                        warna = "danger"
+                    } else if(selisih == 0){
+                        warna = "dark"
+                    }
+
+                    return `<span style="width:100%" class="badge badge-${warna}">${selisih}</span>`
+                }
             },
             {
                 "data": "keterangan",
