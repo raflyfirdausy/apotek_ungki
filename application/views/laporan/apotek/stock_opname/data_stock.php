@@ -91,8 +91,7 @@
                         <table id="table_data" class="table table-sm nowrap table-bordered table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 3%">No.</th>
-                                    <th>Action</th>
+                                    <th class="text-center" style="width: 3%">No.</th>                                    
                                     <th>Nama Obat</th>
                                     <th>Stok Awal</th>
                                     <th>Stok Akhir</th>
